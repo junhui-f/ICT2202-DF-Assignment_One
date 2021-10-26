@@ -37,14 +37,9 @@ import org.sleuthkit.autopsy.ingest.IngestModuleIngestJobSettings;
 public class MediaIngestModuleJobSettings implements IngestModuleIngestJobSettings {
 
     private static final long serialVersionUID = 1L;
-//    private boolean skipKnownFiles = true;
     private boolean imageAnalysisChoice = true;
 
     MediaIngestModuleJobSettings() {}
-
-//    MediaIngestModuleJobSettings(boolean skipKnownFiles) {
-//        this.skipKnownFiles = skipKnownFiles;
-//    }
 
     MediaIngestModuleJobSettings(boolean iamgeAnalysisChoice) {
         this.imageAnalysisChoice = imageAnalysisChoice;
@@ -54,14 +49,6 @@ public class MediaIngestModuleJobSettings implements IngestModuleIngestJobSettin
     public long getVersionNumber() {
         return serialVersionUID;
     }
-
-//    void setSkipKnownFiles(boolean enabled) {
-//        skipKnownFiles = enabled;
-//    }
-//
-//    boolean skipKnownFiles() {
-//        return skipKnownFiles;
-//    }
     
     boolean getImageAnalysisChoice() {
         return imageAnalysisChoice;

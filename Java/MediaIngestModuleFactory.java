@@ -328,6 +328,6 @@ public class MediaIngestModuleFactory implements IngestModuleFactory {
         if (!(settings instanceof MediaIngestModuleJobSettings)) {
             throw new IllegalArgumentException("Expected settings argument to be instanceof ImageIngestModuleJobSettings");
         }
-        return new MediaIngestModule((MediaIngestModuleJobSettings) settings);
+        return new MediaIngestDataFileModule((MediaIngestModuleJobSettings) settings);
     }
 }

@@ -27,6 +27,7 @@
  *  ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  *  OTHER DEALINGS IN THE SOFTWARE. 
  */
+
 package ICT.DF.TryingHardest;
 
 import java.util.List;
@@ -62,34 +63,43 @@ class MediaIngestDataSourceModule implements DataSourceIngestModule {
 
     @Override
     public ProcessResult process(Content dataSource, DataSourceIngestModuleProgress progressBar) {
+        System.out.println("OK - DATA SOURCE");
+        // There are two tasks to do.
+        progressBar.switchToDeterminate(2);
 
-//        // There are two tasks to do.
-//        progressBar.switchToDeterminate(2);
-//
-//        try {
-//            // Get count of files with .doc extension.
-//            FileManager fileManager = Case.getCurrentCaseThrows().getServices().getFileManager();
-//            List<AbstractFile> docFiles = fileManager.findFiles(dataSource, "%.doc");
-//
-//            long fileCount = 0;
-//            for (AbstractFile docFile : docFiles) {
-//                if (!skipKnownFiles || docFile.getKnown() != TskData.FileKnown.KNOWN) {
-//                    ++fileCount;
-//                }
-//            }
-//            progressBar.progress(1);
-//
-//            // check if we were cancelled
-//            if (context.dataSourceIngestIsCancelled()) {
-//                return IngestModule.ProcessResult.OK;
-//            }
-//
+        try {
+            // Get count of files with .doc extension.
+            FileManager fileManager = Case.getCurrentCaseThrows().getServices().getFileManager();
+            List<AbstractFile> pngFiles = fileManager.findFiles(dataSource, "%.png");
+            List<AbstractFile> jpgFiles = fileManager.findFiles(dataSource, "%.jpg");
+
+            long pngFileCount = 0;
+            for (AbstractFile pngFile : pngFiles) {
+                if (!imageAnalysisChoice || pngFile.getKnown() != TskData.FileKnown.KNOWN) {
+                    ++pngFileCount;
+                }
+            }
+
+            long jpgFileCount = 0;
+            for (AbstractFile jpgFile : jpgFiles) {
+                if (!imageAnalysisChoice || jpgFile.getKnown() != TskData.FileKnown.KNOWN) {
+                    ++jpgFileCount;
+                }
+            }
+            
+            progressBar.progress(1);
+
+            // check if we were cancelled
+            if (context.dataSourceIngestIsCancelled()) {
+                return IngestModule.ProcessResult.OK;
+            }
+
 //            // Get files by creation time.
 //            long currentTime = System.currentTimeMillis() / 1000;
 //            long minTime = currentTime - (14 * 24 * 60 * 60); // Go back two weeks.
 //            List<AbstractFile> otherFiles = fileManager.findFiles(dataSource, "crtime > " + minTime);
 //            for (AbstractFile otherFile : otherFiles) {
-//                if (!skipKnownFiles || otherFile.getKnown() != TskData.FileKnown.KNOWN) {
+//                if (!imageAnalysisChoice || otherFile.getKnown() != TskData.FileKnown.KNOWN) {
 //                    ++fileCount;
 //                }
 //            }
@@ -98,23 +108,31 @@ class MediaIngestDataSourceModule implements DataSourceIngestModule {
 //            if (context.dataSourceIngestIsCancelled()) {
 //                return IngestModule.ProcessResult.OK;
 //            }
-//
-//            // Post a message to the ingest messages in box.
-//            String msgText = String.format("Found %d files", fileCount);
-//            IngestMessage message = IngestMessage.createMessage(
-//                    IngestMessage.MessageType.DATA,
-//                    MediaIngestModuleFactory.getModuleName(),
-//                    msgText);
-//            IngestServices.getInstance().postMessage(message);
-//
-//            return IngestModule.ProcessResult.OK;
-//
-//        } catch (TskCoreException | NoCurrentCaseException ex) {
-//            IngestServices ingestServices = IngestServices.getInstance();
-//            Logger logger = ingestServices.getLogger(MediaIngestModuleFactory.getModuleName());
-//            logger.log(Level.SEVERE, "File query failed", ex);
-//            return IngestModule.ProcessResult.ERROR;
-//        }
-        return null;
+
+            // Post a message to the ingest messages in box.
+            String pngText = String.format("Found %d PNG files!", pngFileCount);
+            String jpgText = String.format("Found %d JPG files!", jpgFileCount);
+            
+            IngestMessage pngMessage = IngestMessage.createMessage(
+                    IngestMessage.MessageType.DATA,
+                    MediaIngestModuleFactory.getModuleName(),
+                    pngText);
+            IngestServices.getInstance().postMessage(pngMessage);
+
+            IngestMessage jpgMessage = IngestMessage.createMessage(
+                    IngestMessage.MessageType.DATA,
+                    MediaIngestModuleFactory.getModuleName(),
+                    jpgText);
+            IngestServices.getInstance().postMessage(jpgMessage);
+
+            return IngestModule.ProcessResult.OK;
+
+        } catch (TskCoreException | NoCurrentCaseException ex) {
+            IngestServices ingestServices = IngestServices.getInstance();
+            Logger logger = ingestServices.getLogger(MediaIngestModuleFactory.getModuleName());
+            logger.log(Level.SEVERE, "File query failed", ex);
+            return IngestModule.ProcessResult.ERROR;
+        }
+//        return null;
     }
 }

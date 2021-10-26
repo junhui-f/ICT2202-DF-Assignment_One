@@ -50,12 +50,11 @@ public class MediaIngestModuleJobSettingsPanel extends IngestModuleIngestJobSett
     
     /*
     * -->
-    * --> Things to trigger is checkbox is ticked
+    * --> Set this to preselect checkbox
     * -->
     */
     private void customizeComponents(MediaIngestModuleJobSettings settings) {
-//        skipKnownFilesCheckBox.setSelected(settings.skipKnownFiles());
-        UI_CheckBox_ImageAnalysis.setSelected(settings.getImageAnalysisChoice());
+//        UI_CheckBox_ImageAnalysis.setSelected(settings.getImageAnalysisChoice());
     }
 
     /**
