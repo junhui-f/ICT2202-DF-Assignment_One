@@ -29,6 +29,9 @@
  */
 package ICT.DF.TryingHardest;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -63,6 +66,7 @@ class MediaIngestDataFileModule implements FileIngestModule {
         add("png");
         add("jpg");
     }};
+    private static final String IMAGE_ANALYSIS_SCRIPT_PATH = "/Users/junhui/NetBeansProjects/test/src/ICT/DF/TryingHardest/test.py";
 
 
     MediaIngestDataFileModule(MediaIngestModuleJobSettings settings) {
@@ -93,8 +97,31 @@ class MediaIngestDataFileModule implements FileIngestModule {
             System.out.println("OK - DATA FILE - " + file.getName());
 
             try {
-                int count1 = 1;
+                String processOutput;
+                
+                try { // https://stackoverflow.com/questions/10097491/call-and-receive-output-from-python-script-in-java
 
+                    // Call Python script
+                    Process p = Runtime.getRuntime().exec("python3 " + IMAGE_ANALYSIS_SCRIPT_PATH);
+
+                    // Prepare read buffer
+                    BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                    BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+
+                    // Print std output
+                    while ((processOutput = stdInput.readLine()) != null) {
+                        System.out.println(processOutput);
+                    }
+                    // Print error
+                    while ((processOutput = stdError.readLine()) != null) {
+                        System.out.println(processOutput);
+                    }            
+                } catch (IOException e) {
+                    System.out.println("exception happened - here's what I know: ");
+                    e.printStackTrace();
+                }
+
+                int count1 = 1;
                 // Make an attribute using the ID for the attribute attrType that 
                 // was previously created.
                 BlackboardAttribute attr = new BlackboardAttribute(ATTR_TYPE, MediaIngestModuleFactory.getModuleName(), count1);
