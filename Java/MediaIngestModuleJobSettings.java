@@ -37,12 +37,16 @@ import org.sleuthkit.autopsy.ingest.IngestModuleIngestJobSettings;
 public class MediaIngestModuleJobSettings implements IngestModuleIngestJobSettings {
 
     private static final long serialVersionUID = 1L;
-    private boolean imageAnalysisChoice = true;
+    private boolean imageAnalysisChoice = false;
+    private boolean audioAnalysisChoice = false;
+    private boolean videoAnalysisChoice = false;
 
     MediaIngestModuleJobSettings() {}
 
-    MediaIngestModuleJobSettings(boolean iamgeAnalysisChoice) {
+    MediaIngestModuleJobSettings(boolean imageAnalysisChoice, boolean audioAnalysisChoice, boolean videoAnalysisChoice) {
         this.imageAnalysisChoice = imageAnalysisChoice;
+        this.audioAnalysisChoice = audioAnalysisChoice;
+        this.videoAnalysisChoice = videoAnalysisChoice;
     }
 
     @Override
@@ -53,4 +57,12 @@ public class MediaIngestModuleJobSettings implements IngestModuleIngestJobSettin
     boolean getImageAnalysisChoice() {
         return imageAnalysisChoice;
     }
+    
+    boolean getAudioAnalysisChoice() {
+        return audioAnalysisChoice;
+    }
+
+    boolean getVideoAnalysisChoice() {
+        return videoAnalysisChoice;
+    }    
 }

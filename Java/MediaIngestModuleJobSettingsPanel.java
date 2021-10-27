@@ -65,7 +65,7 @@ public class MediaIngestModuleJobSettingsPanel extends IngestModuleIngestJobSett
     @Override
     public IngestModuleIngestJobSettings getSettings() {
 //        return new MediaIngestModuleJobSettings(skipKnownFilesCheckBox.isSelected());
-        return new MediaIngestModuleJobSettings(UI_CheckBox_ImageAnalysis.isSelected());
+        return new MediaIngestModuleJobSettings(UI_CheckBox_ImageAnalysis.isSelected(), UI_CheckBox_AudioAnalysis.isSelected(), UI_CheckBox_VideoAnalysis.isSelected());
     }
 
     /**
@@ -129,10 +129,12 @@ public class MediaIngestModuleJobSettingsPanel extends IngestModuleIngestJobSett
 
     private void UI_CheckBox_ImageAnalysisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UI_CheckBox_ImageAnalysisActionPerformed
         // TODO add your handling code here:
+        TestImage ti = new TestImage();
     }//GEN-LAST:event_UI_CheckBox_ImageAnalysisActionPerformed
 
     private void UI_CheckBox_AudioAnalysisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UI_CheckBox_AudioAnalysisActionPerformed
         // TODO add your handling code here:
+        TestAudio ta = new TestAudio();
     }//GEN-LAST:event_UI_CheckBox_AudioAnalysisActionPerformed
 
     private void UI_CheckBox_VideoAnalysisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UI_CheckBox_VideoAnalysisActionPerformed

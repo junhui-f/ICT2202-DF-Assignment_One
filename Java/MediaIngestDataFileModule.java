@@ -78,59 +78,54 @@ class MediaIngestDataFileModule implements FileIngestModule {
     @Override
     public IngestModule.ProcessResult process(AbstractFile file) {
 
-        // Skip anything other than actual file system files.
-        // Skip if not defined in validIMGExtensions
-        if ((file.getType() == TskData.TSK_DB_FILES_TYPE_ENUM.UNALLOC_BLOCKS)
-            || (file.getType() == TskData.TSK_DB_FILES_TYPE_ENUM.UNUSED_BLOCKS)
-            || (file.isFile() == false)
-            || (validIMGExtensions.contains((file.getNameExtension()).toLowerCase())) == false) {
-            System.out.println("NOT OK - DATA FILE - " + file.getName());
+        // If Image Analysis sslected
+        if (imageAnalysisChoice == true) {
+            // Skip anything other than actual file system files.
+            // Skip if not defined in validIMGExtensions
+            if ((file.getType() == TskData.TSK_DB_FILES_TYPE_ENUM.UNALLOC_BLOCKS)
+                || (file.getType() == TskData.TSK_DB_FILES_TYPE_ENUM.UNUSED_BLOCKS)
+                || (file.isFile() == false)
+                || (validIMGExtensions.contains((file.getNameExtension()).toLowerCase())) == false) {
+                System.out.println("NOT OK - DATA FILE - " + file.getName());
+                return IngestModule.ProcessResult.OK;
+            }
+
+            System.out.println("OK - DATA FILE - " + file.getName());
+
+            try {
+                int count1 = 1;
+
+                // Make an attribute using the ID for the attribute attrType that 
+                // was previously created.
+                BlackboardAttribute attr = new BlackboardAttribute(ATTR_TYPE, MediaIngestModuleFactory.getModuleName(), count1);
+                // Add the to the general info artifact for the file. In a
+                // real module, you would likely have more complex data types 
+                // and be making more specific artifacts.
+                BlackboardArtifact art = file.getGenInfoArtifact();
+                art.addAttribute(attr);
+
+                // This method is thread-safe with per ingest job reference counted
+                // management of shared data.
+                addToBlackboardPostCount(context.getJobId(), 1L);
+
+                /*
+                 * post the artifact which will index the artifact for keyword
+                 * search, and fire an event to notify UI of this new artifact
+                 */
+                file.getSleuthkitCase().getBlackboard().postArtifact(art, MediaIngestModuleFactory.getModuleName());
+
+                return IngestModule.ProcessResult.OK;
+
+            } catch (TskCoreException | Blackboard.BlackboardException ex) {
+                IngestServices ingestServices = IngestServices.getInstance();
+                Logger logger = ingestServices.getLogger(MediaIngestModuleFactory.getModuleName());
+                logger.log(Level.SEVERE, "Error processing file (id = " + file.getId() + ")", ex);
+                return IngestModule.ProcessResult.ERROR;
+            }
+        } else {
             return IngestModule.ProcessResult.OK;
         }
         
-        System.out.println("OK - DATA FILE - " + file.getName());
-
-        // Do a nonsensical calculation of the number of 0x00 bytes
-        // in the first 1024-bytes of the file.  This is for demo
-        // purposes only.
-        try {
-            byte buffer[] = new byte[1024];
-            int len = file.read(buffer, 0, 1024);
-            int count = 0;
-            for (int i = 0; i < len; i++) {
-                if (buffer[i] == 0x00) {
-                    count++;
-                }
-            }
-
-            // Make an attribute using the ID for the attribute attrType that 
-            // was previously created.
-            BlackboardAttribute attr = new BlackboardAttribute(ATTR_TYPE, MediaIngestModuleFactory.getModuleName(), count);
-
-            // Add the to the general info artifact for the file. In a
-            // real module, you would likely have more complex data types 
-            // and be making more specific artifacts.
-            BlackboardArtifact art = file.getGenInfoArtifact();
-            art.addAttribute(attr);
-
-            // This method is thread-safe with per ingest job reference counted
-            // management of shared data.
-            addToBlackboardPostCount(context.getJobId(), 1L);
-
-            /*
-             * post the artifact which will index the artifact for keyword
-             * search, and fire an event to notify UI of this new artifact
-             */
-            file.getSleuthkitCase().getBlackboard().postArtifact(art, MediaIngestModuleFactory.getModuleName());
-
-            return IngestModule.ProcessResult.OK;
-
-        } catch (TskCoreException | Blackboard.BlackboardException ex) {
-            IngestServices ingestServices = IngestServices.getInstance();
-            Logger logger = ingestServices.getLogger(MediaIngestModuleFactory.getModuleName());
-            logger.log(Level.SEVERE, "Error processing file (id = " + file.getId() + ")", ex);
-            return IngestModule.ProcessResult.ERROR;
-        }
     }
 
     @Override
