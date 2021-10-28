@@ -8,3 +8,14 @@ deepspeech.scorer
 and placed in a folder named models
 
 e.g: ~/DeepSpeech/models/deepspeech.pbmm
+
+Output:
+
+output.txt:
+  Debug statements
+  
+transcribed.txt
+  json objects
+  syntax: {"filename":"example.wav", "text":"hello world"}
+  
+
