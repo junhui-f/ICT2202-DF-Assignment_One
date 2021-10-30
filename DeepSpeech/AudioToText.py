@@ -70,11 +70,15 @@ for file in files:
 	if file.endswith('.mp3') or file.endswith('.mp4'):
 		sound = AudioSegment.from_mp3(file)
 		sound.export('temp.wav', format='wav')
-		f = open('transcribed.txt', "a+")
-		f.write('{"filename":"'+file+'", "text":"'+transcribe('temp.wav')+'"\n')
-		f.close()
+		print(transcribe('temp.wav'))
+		# f = open('transcribed.txt', "a+")
+		# f.write('{"filename":"'+file+'", "text":"'+transcribe('temp.wav')+'"\n')
+		# f.close()
 
+	elif file.endswith('.wav'):
+		print(transcribe(file))
+		# f = open('transcribed.txt', 'a+')
+		# f.write('{"filename":"'+file+'", "text":"'+transcribe(file)+'"}\n')
+		# f.close()
 	else:
-		f = open('transcribed.txt', 'a+')
-		f.write('{"filename":"'+file+'", "text":"'+transcribe(file)+'"}\n')
-		f.close()
+		print("Error transcribing.")

@@ -142,34 +142,6 @@ class AudioToTextModule(FileIngestModule):
             self.log(Level.INFO, "Found an audio file: " + file.getName())
             self.filesFound+=1
 
-            # Make an artifact on the blackboard.  TSK_INTERESTING_FILE_HIT is a generic type of
-            # artifact.  Refer to the developer docs for other examples.
-            art = file.newArtifact(BlackboardArtifact.ARTIFACT_TYPE.TSK_INTERESTING_FILE_HIT)
-            att = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_SET_NAME,
-                  AudioToTextModuleFactory.moduleName, "Audio Files Found")
-            art.addAttribute(att)
-
-            try:
-                # index the artifact for keyword search
-                blackboard.indexArtifact(art)
-            except Blackboard.BlackboardException as e:
-                self.log(Level.SEVERE, "Error indexing artifact " + art.getDisplayName())
-
-            # Fire an event to notify the UI and others that there is a new artifact
-            IngestServices.getInstance().fireModuleDataEvent(
-                ModuleDataEvent(AudioToTextModuleFactory.moduleName,
-                    BlackboardArtifact.ARTIFACT_TYPE.TSK_INTERESTING_FILE_HIT, None))
-
-            # For the example (this wouldn't be needed normally), we'll query the blackboard for data that was added
-            # by other modules. We then iterate over its attributes.  We'll just print them, but you would probably
-            # want to do something with them.
-            artifactList = file.getArtifacts(BlackboardArtifact.ARTIFACT_TYPE.TSK_INTERESTING_FILE_HIT)
-            self.log(Level.SEVERE, "DEBUG artifact:" + str(artifactList))
-            for artifact in artifactList:
-                attributeList = artifact.getAttributes()
-                for attrib in attributeList:
-                    self.log(Level.INFO, attrib.toString())
-
             ##Extract audio begins here
             inputStream = ReadContentInputStream(file)
             buffer = jarray.zeros(file.getSize(), "b")            
@@ -196,13 +168,38 @@ class AudioToTextModule(FileIngestModule):
 
             #Call python script                      
             commandToCall = 'python AudioToText.py ' + str(file.getName())
-            x = subprocess.call(commandToCall, shell=True, cwd=file_dir)
+            transcript = subprocess.check_output(commandToCall, shell=True, cwd=file_dir)
 
-            # Debug Statements
-            with open(file_dir+'\\output.txt', 'a+') as f2:
-                f2.write('CWD: '+ commandToCall)
-                f2.write('\nSuccess Code' + str(x))
-                f2.write(file.getLocalPath())
+            # Make an artifact on the blackboard.  TSK_INTERESTING_FILE_HIT is a generic type of
+            # artifact.  Refer to the developer docs for other examples.
+            art = file.newArtifact(BlackboardArtifact.ARTIFACT_TYPE.TSK_INTERESTING_FILE_HIT)
+            att = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_SET_NAME,
+                  AudioToTextModuleFactory.moduleName, "Audio with Speech Found")
+            attId = blackboard.getOrAddAttributeType("TranscribedText", BlackboardAttribute.TSK_BLACKBOARD_ATTRIBUTE_VALUE_TYPE.STRING, "Transcribed Text")
+            atribute=BlackboardAttribute(attId, AudioToTextModuleFactory.moduleName, transcript)
+            art.addAttribute(att)
+            art.addAttribute(atribute)
+
+            try:
+                # index the artifact for keyword search
+                blackboard.indexArtifact(art)
+            except Blackboard.BlackboardException as e:
+                self.log(Level.SEVERE, "Error indexing artifact " + art.getDisplayName())
+
+            # Fire an event to notify the UI and others that there is a new artifact
+            IngestServices.getInstance().fireModuleDataEvent(
+                ModuleDataEvent(AudioToTextModuleFactory.moduleName,
+                    BlackboardArtifact.ARTIFACT_TYPE.TSK_INTERESTING_FILE_HIT, None))
+
+            # For the example (this wouldn't be needed normally), we'll query the blackboard for data that was added
+            # by other modules. We then iterate over its attributes.  We'll just print them, but you would probably
+            # want to do something with them.
+            artifactList = file.getArtifacts(BlackboardArtifact.ARTIFACT_TYPE.TSK_INTERESTING_FILE_HIT)
+            self.log(Level.SEVERE, "DEBUG artifact:" + str(artifactList))
+            for artifact in artifactList:
+                attributeList = artifact.getAttributes()
+                for attrib in attributeList:
+                    self.log(Level.INFO, attrib.toString())
 
         return IngestModule.ProcessResult.OK
 
