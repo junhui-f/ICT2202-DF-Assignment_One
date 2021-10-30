@@ -51,9 +51,6 @@ def transcribe(audio_file):
 	buffer, rate= read_wav_file(audio_file)
 	data16 = np.frombuffer(buffer, dtype=np.int16)
 
-	# REMOVES FILE - ONLY USE THIS IF REMOVING TEMPORARY FILES CREATED BY AUTOPSY.
-	os.remove(audio_file)
-
 	return model.stt(data16)
 
 with SilenceStream(sys.stderr):
@@ -71,14 +68,13 @@ for file in files:
 		sound = AudioSegment.from_mp3(file)
 		sound.export('temp.wav', format='wav')
 		print(transcribe('temp.wav'))
+		os.remove('temp.wav')
 		# f = open('transcribed.txt', "a+")
 		# f.write('{"filename":"'+file+'", "text":"'+transcribe('temp.wav')+'"\n')
 		# f.close()
 
 	elif file.endswith('.wav'):
 		print(transcribe(file))
-		# f = open('transcribed.txt', 'a+')
-		# f.write('{"filename":"'+file+'", "text":"'+transcribe(file)+'"}\n')
-		# f.close()
+		
 	else:
 		print("Error transcribing.")

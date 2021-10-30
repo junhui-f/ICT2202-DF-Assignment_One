@@ -136,7 +136,7 @@ class AudioToTextModule(FileIngestModule):
         blackboard = Case.getCurrentCase().getServices().getBlackboard()
 
         # For an example, we will flag files with .wav in the name and make a blackboard artifact.
-        if file.getName().lower().endswith(".wav"):            
+        if file.getName().lower().endswith(".wav") or file.getName().lower().endswith(".mp3") or file.getName().lower().endswith(".mp4"):            
             self.log(Level.INFO, "DEBUG3")            
 
             self.log(Level.INFO, "Found an audio file: " + file.getName())
@@ -156,9 +156,10 @@ class AudioToTextModule(FileIngestModule):
             buffer = [int(x) for x in buffer]
 
             file_dir = os.path.dirname(os.path.abspath(__file__))
+            tempFile = file_dir+'\\'+str(file.getName())
 
             #Save bytes into audio file 
-            with open(file_dir+'\\'+str(file.getName()), 'wb') as f:
+            with open(tempFile, 'wb') as f:
                 #convert bytes into hex, output hex to file
                 for value in buffer:
                     hexValue = (str(int2hex(int(value),8))[2:])                    
@@ -179,7 +180,8 @@ class AudioToTextModule(FileIngestModule):
             atribute=BlackboardAttribute(attId, AudioToTextModuleFactory.moduleName, transcript)
             art.addAttribute(att)
             art.addAttribute(atribute)
-
+            os.remove(tempFile)
+            
             try:
                 # index the artifact for keyword search
                 blackboard.indexArtifact(art)
