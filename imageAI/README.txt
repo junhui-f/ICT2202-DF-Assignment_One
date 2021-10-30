@@ -18,6 +18,6 @@ To Do Backlog
 	
 Updates
 	-  all temp images are automatically deleted after module completes
-	- image tags are added as "set names" in autopsy (can be found via autopsy search bar)
+	- image tags are added as "set names" in autopsy (user can use autopsy search bar to find)
 	- duplicate objects in the same image are ignored (3 person in 1 image has the same tag as 1 person)
 	- script now includes png,jpg,jpeg,gif instead if just jpg
