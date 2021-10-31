@@ -1,5 +1,5 @@
 from imageai.Detection import ObjectDetection
-import os,sys,time,re,tempfile
+import os,sys,time,re
 
 img_file_name = sys.argv[1]
 tempDir = sys.argv[2]
