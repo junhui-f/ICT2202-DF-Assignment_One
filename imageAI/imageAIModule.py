@@ -31,7 +31,7 @@
 # Search for TODO for the things that you need to change
 # See http://sleuthkit.org/autopsy/docs/api-docs/4.6.0/index.html for documentation
 
-import jarray
+# import jarray
 import inspect
 from java.lang import System
 from java.util.logging import Level
@@ -60,12 +60,14 @@ import os
 import binascii
 import re
 import subprocess
+import tempfile
 from subprocess import check_output
 
-tempDir = 'C:\\Users\\Kevin\\Desktop\\temp\\'
+tempDir = tempfile.gettempdir() + "/"
+scriptFilePath = os.path.dirname(os.path.abspath(__file__)) + "/detect.py"
 
 def findLen(str1):
-    counter = 0    
+    counter = 0
     for i in str1:
         counter += 1
     return counter
@@ -81,7 +83,7 @@ def int2hex(number, bits):
 def cleanUp():
     #remove images in temp
     for file in os.listdir(tempDir):
-        if file.endswith('.jpg'):      
+        if file.endswith('.jpg'):
             os.remove(tempDir+file)
 
 # Factory that defines the name and details of the module and allows Autopsy
@@ -148,30 +150,30 @@ class FindBigRoundFilesIngestModule(FileIngestModule):
 
         # flag files that ends with jpg, png, gif, jpeg
         if file.getName().lower().endswith(".jpg") or file.getName().lower().endswith(".png") or file.getName().lower().endswith(".gif") or file.getName().lower().endswith(".png") or file.getName().lower().endswith(".jpeg"):
-            self.log(Level.INFO, "DEBUG3")            
+            self.log(Level.INFO, "DEBUG3")
 
             self.log(Level.INFO, "Found an image file: " + file.getName())
             self.filesFound+=1
 
             ##Extract images begins here
             inputStream = ReadContentInputStream(file)
-            buffer = jarray.zeros(file.getSize(), "b")            
+            buffer = jarray.zeros(file.getSize(), "b")
             len = inputStream.read(buffer)
 
-            #remove uneccessary characters 
+            #remove uneccessary characters
             buffer = str(buffer)
             buffer=re.sub("array.*\\[",'',buffer)
-            buffer=re.sub(" ",'',buffer)                   
+            buffer=re.sub(" ",'',buffer)
             buffer=re.sub("]\\)",'',buffer)
             buffer = list(buffer.split(","))
             buffer = [int(x) for x in buffer]
 
-            #Save bytes into image file 
+            #Save bytes into image file
             with open(tempDir+str(file.getName()), 'wb') as f:
                 #convert bytes into hex, output hex to file
                 for value in buffer:
-                    hexValue = (str(int2hex(int(value),8))[2:])                    
-                    if findLen(hexValue) == 1:                  
+                    hexValue = (str(int2hex(int(value),8))[2:])
+                    if findLen(hexValue) == 1:
                         hexValue = "0"+hexValue
                         f.write(str(binascii.unhexlify(hexValue)))
                     else:
@@ -179,9 +181,9 @@ class FindBigRoundFilesIngestModule(FileIngestModule):
 
             #Call the imageAI script (tags are saved as the images' filenames)
             # x = subprocess.call('python \"C:\\Users\\Kevin\\Desktop\\2202 project\\detect.py\" C:\\Users\\Kevin\\Desktop\\temp\\'+str(file.getName()), shell=True, cwd=os.path.expanduser('~'))
-            filePath = tempDir+str(file.getName())
-            stdout = check_output(['python', 'C:\\Users\\Kevin\\Desktop\\2202 project\\detect.py', filePath])
-            
+            fileName = file.getName()
+            stdout = check_output(['python3', scriptFilePath, fileName, tempDir])
+
             ##Process the output folder to obtain the tags
             # Make an artifact on the blackboard.  TSK_INTERESTING_FILE_HIT is a generic type of
             # artifact.  Refer to the developer docs for other examples.
