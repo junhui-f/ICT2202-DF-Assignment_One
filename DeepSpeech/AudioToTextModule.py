@@ -80,7 +80,7 @@ def int2hex(number, bits):
 class AudioToTextModuleFactory(IngestModuleFactoryAdapter):
 
     # TODO: give it a unique name.  Will be shown in module list, logs, etc.
-    moduleName = "AudioToText"
+    moduleName = "Trying Hardest - AudioToText"
 
     def getModuleDisplayName(self):
         return self.moduleName
