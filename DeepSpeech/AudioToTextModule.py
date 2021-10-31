@@ -156,7 +156,7 @@ class AudioToTextModule(FileIngestModule):
             buffer = [int(x) for x in buffer]
 
             file_dir = os.path.dirname(os.path.abspath(__file__))
-            tempFile = file_dir+'\\'+str(file.getName())
+            tempFile = os.path.join(file_dir, str(file.getName()))
 
             #Save bytes into audio file 
             with open(tempFile, 'wb') as f:
@@ -175,7 +175,7 @@ class AudioToTextModule(FileIngestModule):
                 transcript = "Error"
             
             os.remove(tempFile)
-            
+
             if transcript.strip().decode("utf-8") == 'Does not contain any speech.' or transcript.strip().decode("utf-8") == 'Error':
                 return IngestModule.ProcessResult.OK
 

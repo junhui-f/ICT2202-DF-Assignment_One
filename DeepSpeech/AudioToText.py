@@ -89,7 +89,6 @@ def transcribe(buffer):
     
     return model.stt(data16)
 
-
 with SilenceStream(sys.stderr):
 	model = Model(model_file_path)
 	model.enableExternalScorer(lm_file_path)
@@ -118,8 +117,8 @@ for file in files:
     # Check Sample rate. We need it to be 8000/16000/32000/48000 for VAD. Convert to a wav with specific sample rate otherwise.
     buffer, rate= read_wav_file(file)
     if rate not in (8000, 16000, 32000, 48000):
-        write_wave(file_dir+'\\'+'temp2.wav', buffer, 16000)
-        buffer, rate = read_wav_file(file_dir+'\\'+'temp2.wav')
+        write_wave(os.path.join(file_dir,'temp2.wav'), buffer, 16000)
+        buffer, rate = read_wav_file(os.path.join(file_dir,'temp2.wav'))
 
     # VAD - To check if the audio file contains any speech for further processing.
     containsSpeech = 0
