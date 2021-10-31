@@ -89,17 +89,17 @@ def cleanUp():
 # Factory that defines the name and details of the module and allows Autopsy
 # to create instances of the modules that will do the anlaysis.
 # TODO: Rename this to something more specific.  Search and replace for it because it is used a few times
-class FindBigRoundFilesIngestModuleFactory(IngestModuleFactoryAdapter):
+class ImageAnalyserModuleFactory(IngestModuleFactoryAdapter):
 
     # TODO: give it a unique name.  Will be shown in module list, logs, etc.
-    moduleName = "Sample file ingest Module"
+    moduleName = "Trying Hardest - Image Analyser"
 
     def getModuleDisplayName(self):
         return self.moduleName
 
     # TODO: Give it a description
     def getModuleDescription(self):
-        return "Image analyser"
+        return "This modile utilizes imageAI to detect objects within images."
 
     def getModuleVersionNumber(self):
         return "1.0"
@@ -110,15 +110,15 @@ class FindBigRoundFilesIngestModuleFactory(IngestModuleFactoryAdapter):
 
     # can return null if isFileIngestModuleFactory returns false
     def createFileIngestModule(self, ingestOptions):
-        return FindBigRoundFilesIngestModule()
+        return ImageAnalyserModule()
 
 
 # File-level ingest module.  One gets created per thread.
 # TODO: Rename this to something more specific. Could just remove "Factory" from above name.
 # Looks at the attributes of the passed in file.
-class FindBigRoundFilesIngestModule(FileIngestModule):
+class ImageAnalyserModule(FileIngestModule):
 
-    _logger = Logger.getLogger(FindBigRoundFilesIngestModuleFactory.moduleName)
+    _logger = Logger.getLogger(ImageAnalyserModuleFactory.moduleName)
 
     def log(self, level, msg):
         self._logger.logp(level, self.__class__.__name__, inspect.stack()[1][3], msg)
@@ -189,7 +189,7 @@ class FindBigRoundFilesIngestModule(FileIngestModule):
             # artifact.  Refer to the developer docs for other examples.
             art = file.newArtifact(BlackboardArtifact.ARTIFACT_TYPE.TSK_INTERESTING_FILE_HIT)
             att = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_SET_NAME,
-                  FindBigRoundFilesIngestModuleFactory.moduleName, str(stdout))
+                  ImageAnalyserModuleFactory.moduleName, str(stdout))
             art.addAttribute(att)
 
             try:
@@ -200,7 +200,7 @@ class FindBigRoundFilesIngestModule(FileIngestModule):
 
             # Fire an event to notify the UI and others that there is a new artifact
             IngestServices.getInstance().fireModuleDataEvent(
-                ModuleDataEvent(FindBigRoundFilesIngestModuleFactory.moduleName,
+                ModuleDataEvent(ImageAnalyserModuleFactory.moduleName,
                     BlackboardArtifact.ARTIFACT_TYPE.TSK_INTERESTING_FILE_HIT, None))
 
             # For the example (this wouldn't be needed normally), we'll query the blackboard for data that was added
@@ -220,7 +220,7 @@ class FindBigRoundFilesIngestModule(FileIngestModule):
     def shutDown(self):
         # As a final part of this example, we'll send a message to the ingest inbox with the number of files found (in this thread)
         message = IngestMessage.createMessage(
-            IngestMessage.MessageType.DATA, FindBigRoundFilesIngestModuleFactory.moduleName,
+            IngestMessage.MessageType.DATA, ImageAnalyserModuleFactory.moduleName,
                 str(self.filesFound) + " files found")
         ingestServices = IngestServices.getInstance().postMessage(message)
         cleanUp()
