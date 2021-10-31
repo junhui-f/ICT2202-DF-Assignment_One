@@ -136,7 +136,7 @@ class AudioToTextModule(FileIngestModule):
         blackboard = Case.getCurrentCase().getServices().getBlackboard()
 
         # For an example, we will flag files with .wav in the name and make a blackboard artifact.
-        if file.getName().lower().endswith(".wav") or file.getName().lower().endswith(".mp3") or file.getName().lower().endswith(".mp4"):            
+        if file.getName().lower().endswith(".wav") or file.getName().lower().endswith(".mp3"):            
             self.log(Level.INFO, "DEBUG3")            
 
             self.log(Level.INFO, "Found an audio file: " + file.getName())
@@ -163,13 +163,21 @@ class AudioToTextModule(FileIngestModule):
                 #convert bytes into hex, output hex to file
                 for value in buffer:
                     hexValue = (str(int2hex(int(value),8))[2:])                    
-                    if findLen(hexValue) == 1:                  
+                    if findLen(hexValue) == 1:
                         hexValue = "0"+hexValue
                     f.write(str(binascii.unhexlify(hexValue)))
 
             #Call python script                      
-            commandToCall = 'python AudioToText.py ' + str(file.getName())
-            transcript = subprocess.check_output(commandToCall, shell=True, cwd=file_dir)
+            commandToCall = 'python AudioToText.py ' + '\"' + str(file.getName()) + '\"'
+            try: 
+                transcript = subprocess.check_output(commandToCall, shell=True, cwd=file_dir)
+            except: 
+                transcript = "Error"
+            
+            os.remove(tempFile)
+            
+            if transcript.strip().decode("utf-8") == 'Does not contain any speech.' or transcript.strip().decode("utf-8") == 'Error':
+                return IngestModule.ProcessResult.OK
 
             # Make an artifact on the blackboard.  TSK_INTERESTING_FILE_HIT is a generic type of
             # artifact.  Refer to the developer docs for other examples.
@@ -177,11 +185,10 @@ class AudioToTextModule(FileIngestModule):
             att = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_SET_NAME,
                   AudioToTextModuleFactory.moduleName, "Audio with Speech Found")
             attId = blackboard.getOrAddAttributeType("TranscribedText", BlackboardAttribute.TSK_BLACKBOARD_ATTRIBUTE_VALUE_TYPE.STRING, "Transcribed Text")
-            atribute=BlackboardAttribute(attId, AudioToTextModuleFactory.moduleName, transcript)
+            atribute=BlackboardAttribute(attId, AudioToTextModuleFactory.moduleName, transcript.strip().decode("utf-8"))
             art.addAttribute(att)
             art.addAttribute(atribute)
-            os.remove(tempFile)
-            
+
             try:
                 # index the artifact for keyword search
                 blackboard.indexArtifact(art)
