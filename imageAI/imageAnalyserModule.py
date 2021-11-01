@@ -56,7 +56,7 @@ import subprocess
 import tempfile
 from subprocess import check_output
 
-tempDir = tempfile.gettempdir() + '\\' +'extracted_images\\'
+tempDir = tempfile.gettempdir() + '/extracted_images/'
 imageAIScriptFilePath = os.path.dirname(os.path.abspath(__file__)) + "/detect.py"
 facialRecScriptFilePath = os.path.dirname(os.path.abspath(__file__)) + "/detectFace.py"
 doFacialRec = False
