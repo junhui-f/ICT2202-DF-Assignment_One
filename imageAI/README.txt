@@ -22,6 +22,6 @@ Updates (01/11)
 	- Added facial recognition
 		1. User can choose to include this submodule/function? when analysing images (checkbox)
 		2. User choose a target face image via autopsy GUI
-		3. module will analyse all images in the temp folder for the face specified
+		3. module will analyse all extracted images in the temp folder for the face specified
 		4. results is in the 'facial recognition' column as 'MATCH' or 'NIL'
 	- Temp images are now extracted to os.tempDir/extracted_images (user's tmp folder might have his own img files)	
