@@ -24,6 +24,10 @@ Output:
 
 TODO:
 
-Allow user to set verbosity (see: AudioToText.py vars [
+Allow user to set verbosity (see: AudioToText.py vars)
+  1. beam_width
+  2. lm_alpha (default value is 0.93 as of v.0.9.3-en)
+  3. lm_beta (default value is 1.18 as of v.0.9.3-en)
+  
 Allow user to choose model, scorer locations
 Allow user to choose ffmpeg++ locations (tentative)
