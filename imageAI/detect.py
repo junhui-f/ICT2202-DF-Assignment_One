@@ -3,7 +3,7 @@ import os,sys,time,re
 
 img_file_name = sys.argv[1]
 tempDir = sys.argv[2]
-modelFilePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'models/yolo-tiny.h5')
+modelFilePath = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'models\yolo-tiny.h5')
 
 detector = ObjectDetection()
 detector.setModelTypeAsTinyYOLOv3()
