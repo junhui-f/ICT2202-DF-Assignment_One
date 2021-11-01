@@ -31,3 +31,8 @@ Allow user to set verbosity (see: AudioToText.py vars)
   
 Allow user to choose model, scorer locations
 Allow user to choose ffmpeg++ locations (tentative)
+
+
+Command Syntax before i forget
+
+python AudioToText.py <Model(.pbmm) file path> <Scorer(.scorer) file path> <beam_width> <lm_alpha> <lm_beta> <EnableVAD?:1/0> <VADVerbosity:0~3> <FilePath(s)>
