@@ -20,3 +20,10 @@ e.g: ~/DeepSpeech/models/deepspeech.pbmm
 Output:
   Under Analysis Results, "Transcribed Text: <transcribed text>"
   Searchable using Keyword Ingest.
+
+
+TODO:
+
+Allow user to set verbosity (see: AudioToText.py vars [
+Allow user to choose model, scorer locations
+Allow user to choose ffmpeg++ locations (tentative)
