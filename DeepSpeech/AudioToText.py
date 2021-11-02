@@ -7,23 +7,39 @@ import wave
 import webrtcvad
 import contextlib
 
-# If additional file names are not provided
+# If additional file names are not provided, or not all arguments are provided
 if len(sys.argv) < 9:
-    print("Usage: python AudioToText.py <Model(.pbmm) file path> <Scorer(.scorer) file path> <beam_width> <lm_alpha> <lm_beta> <EnableVAD?:1/0> <VADSTRICTNESS:0~3> <FilePath(s)>")
+    print("Usage: python AudioToText.py <Model(.pbmm) file path> <Scorer(.scorer) file path> <beam_width> <lm_alpha> <lm_beta> <EnableVAD?:[1/0]> <VADSTRICTNESS:[0-3]> <FilePath(s)>")
     # python AudioToText.py modelFile scorerFile beam_width lm_alpha lm_beta VAD(1/0) VADSTRICTNESS filepath
     # ######    argv[0]       argv[1]    argv[2]    argv[3]   argv[4] argv[5] argv[6]     argv[7]     argv[8]
     exit()
 
+
+""" 
+    Arguments - Command Line
+
+    sys.argv[0]: AudioToText.py
+    sys.argv[1]: Model File Path
+    sys.argv[2]: Scorer File Path
+    sys.argv[3]: beam_width
+    sys.argv[4]: lm_alpha
+    sys.argv[5]: lm_beta
+    sys.argv[6]: Enable Voice Activity Detection (VAD)
+    sys.argv[7]: Voice Activity Detection Strictness 
+    sys.argv[8]: File Path(s)
+
+"""
+
 files = sys.argv[8:]
 file_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Choose model and scorer, relative file path
+# Model and Scorer file paths
 model_file_path = sys.argv[1]
 lm_file_path = sys.argv[2]
 
-beam_width = int(sys.argv[3]) # lower = faster, but less accurate. vice versa. 500 for accuracy, 100 for prod
-lm_alpha = float(sys.argv[4]) # Language model weight; recommended values (as of v0.9.3 - en) 
-lm_beta = float(sys.argv[5]) # Word insertion weight; recomended values (as of v0.9.3 - en)
+beam_width = int(sys.argv[3]) # lower = faster, but less accurate, vice versa.
+lm_alpha = float(sys.argv[4]) # Language model weight; recommended values: 0.93 (as of v0.9.3 - en) 
+lm_beta = float(sys.argv[5]) # Word insertion weight; recomended values: 1.18 (as of v0.9.3 - en)
 
 # Class to redirect stderr to null, so that it doesn't print.
 class SilenceStream():
@@ -87,6 +103,9 @@ def write_wave(path, audio, sample_rate):
         wf.writeframes(audio)
 
 def transcribe(buffer):
+    """ 
+    Reads Audio Buffer and transcribes
+    """
     data16 = np.frombuffer(buffer, dtype=np.int16)
     
     return model.stt(data16)
@@ -103,7 +122,7 @@ vad = webrtcvad.Vad(3) # Integer 0-3; 0 least aggressive, 3 most.
 # Iterate list of files
 for file in files:
 
-    # Initial Check: Are any of the arguments non mp3/wav?
+    # Initial Check: Are any of the files non mp3/wav?
     if not file.endswith('.mp3') and not file.endswith('.wav'):
         print("Invalid File type.")
         continue
@@ -118,15 +137,16 @@ for file in files:
     
     containsSpeech = 0
     buffer, rate= read_wav_file(file)
+
+    # VAD - To check if the audio file contains any speech for further processing.
+    # The purpose of VAD is to not transcribe audio files that do not even have text in the first place.
     if int(sys.argv[6]) == 1:
         # Check Sample rate. We need it to be 8000/16000/32000/48000 for VAD. Convert to a wav with specific sample rate otherwise.
         if rate not in (8000, 16000, 32000, 48000):
             write_wave(os.path.join(file_dir,'temp2.wav'), buffer, 16000)
             buffer, rate = read_wav_file(os.path.join(file_dir,'temp2.wav'))
-        # VAD - To check if the audio file contains any speech for further processing.
-        # The purpose of VAD is to save time from transcibing audio files that do not even have text in the first place.
-        vad = webrtcvad.Vad(int(sys.argv[7])) # Integer 0-3; 0 least aggressive, 3 most.
-        # vad stuffs
+
+        vad = webrtcvad.Vad(int(sys.argv[7])) # Integer 0-3; 0 least strict, 3 most strict.
         frames = frame_generator(30, buffer, rate)
         frames = list(frames)
         for frame in frames:
