@@ -85,8 +85,8 @@ import re
 import subprocess
 import tempfile
 
-ModelFilePath = "x"
-ScorerFilePath = "d"
+ModelFilePath = "models/deepspeech.pbmm"
+ScorerFilePath = "models/deepspeech.scorer"
 beam_width = "100"
 lm_alpha = "0.93"
 lm_beta = "1.18"
