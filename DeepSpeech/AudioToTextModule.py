@@ -230,7 +230,6 @@ class AudioIngestModule(FileIngestModule):
         return IngestModule.ProcessResult.OK
 
     # Where any shutdown code is run and resources are freed.
-    # TODO: Add any shutdown code that you need here.
     def shutDown(self):
         # As a final part of this example, we'll send a message to the ingest inbox with the number of files found (in this thread)
         message = IngestMessage.createMessage(
@@ -507,7 +506,6 @@ class GUI_UISettingsPanel(IngestModuleIngestJobSettingsPanel):
 
         self.add(self.panel0)
 
-    # TODO: Update this for your UI
     def customizeComponents(self):
         pass
 
