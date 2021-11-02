@@ -1,7 +1,8 @@
-# This python autopsy module is an example of the different types of 
-# things you can do with the GUI portion of an Autopsy Pythin plugin
+# Sample module in the public domain. Feel free to use this as a template
+# for your modules (and you can remove this header and take complete credit
+# and liability)
 #
-# Contact: Mark McKinnon [Mark [dot] McKinnon <at> gmail [dot] com]
+# Contact: Brian Carrier [carrier <at> sleuthkit [dot] org]
 #
 # This is free and unencumbered software released into the public domain.
 #
@@ -26,12 +27,9 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 # OTHER DEALINGS IN THE SOFTWARE.
 
-# GUI_Test module.
-# February 2017
-# 
-# Comments 
-#   Version 1.0 - Initial version - Feb 2017
-# 
+# Simple file-level ingest module for Autopsy.
+# Search for TODO for the things that you need to change
+# See http://sleuthkit.org/autopsy/docs/api-docs/4.6.0/index.html for documentation
 
 import jarray
 import inspect
@@ -109,7 +107,6 @@ def int2hex(number, bits):
     else:
         return hex(number)
 
-
 # Factory that defines the name and details of the module and allows Autopsy
 # to create instances of the modules that will do the analysis.
 class AudioToTextModuleFactory(IngestModuleFactoryAdapter):
@@ -117,13 +114,15 @@ class AudioToTextModuleFactory(IngestModuleFactoryAdapter):
     def __init__(self):
         self.settings = None
 
-    moduleName = "GUI Test"
-    
+    # TODO: give it a unique name.  Will be shown in module list, logs, etc.
+    moduleName = "Trying Hardest - AudioToText"
+
     def getModuleDisplayName(self):
         return self.moduleName
-    
+
+    # TODO: Give it a description
     def getModuleDescription(self):
-        return "GUI Test Example"
+        return "This module utilizes DeepSpeech to convert audio to text."
     
     def getModuleVersionNumber(self):
         return "1.0"
@@ -141,9 +140,11 @@ class AudioToTextModuleFactory(IngestModuleFactoryAdapter):
         self.settings = settings
         return GUI_TestWithUISettingsPanel(self.settings)
 
+    # Return true if module wants to get called for each file
     def isFileIngestModuleFactory(self):
         return True
 
+    # can return null if isFileIngestModuleFactory returns false
     def createFileIngestModule(self, ingestOptions):
         return AudioToTextModule(self.settings)
 
@@ -280,7 +281,6 @@ class AudioToTextModule(FileIngestModule):
             IngestMessage.MessageType.DATA, AudioToTextModuleFactory.moduleName,
                 str(self.filesFound) + " files found")
         ingestServices = IngestServices.getInstance().postMessage(message)    
-
 
 
 # UI that is shown to user for each ingest job so they can configure the job.
