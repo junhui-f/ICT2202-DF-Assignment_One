@@ -103,7 +103,7 @@ def int2hex(number, bits):
 
 # Factory that defines the name and details of the module and allows Autopsy
 # to create instances of the modules that will do the analysis.
-class GUI_TestIngestModuleFactory(IngestModuleFactoryAdapter):
+class AudioToTextModuleFactory(IngestModuleFactoryAdapter):
 
     def __init__(self):
         self.settings = None
@@ -143,9 +143,9 @@ class GUI_TestIngestModuleFactory(IngestModuleFactoryAdapter):
         return AudioToTextModule(self.settings)
 
 # Data Source-level ingest module.  One gets created per data source.
-class GUI_TestIngestModule(DataSourceIngestModule):
+class AudioToTextModule(DataSourceIngestModule):
 
-    _logger = Logger.getLogger(GUI_TestIngestModuleFactory.moduleName)
+    _logger = Logger.getLogger(AudioToTextModuleFactory.moduleName)
 
     def log(self, level, msg):
         self._logger.logp(level, self.__class__.__name__, inspect.stack()[1][3], msg)
