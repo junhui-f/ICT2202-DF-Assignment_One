@@ -170,7 +170,7 @@ class VideoModule(FileIngestModule):
             # artifact.  Refer to the developer docs for other examples.
             art = file.newArtifact(BlackboardArtifact.ARTIFACT_TYPE.TSK_INTERESTING_FILE_HIT)
             att = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_SET_NAME,
-                                      VideoModuleFactory.moduleName, "Video analysis finish")
+                                      VideoModuleFactory.moduleName, "Video Analysis Results")
             attId = blackboard.getOrAddAttributeType("Objects Found",
                                                      BlackboardAttribute.TSK_BLACKBOARD_ATTRIBUTE_VALUE_TYPE.STRING,
                                                      "Objects Found")
