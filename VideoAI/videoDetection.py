@@ -5,7 +5,7 @@ from matplotlib import pyplot as plt
 execution_path = os.getcwd()
 video_detector = VideoObjectDetection()
 video_detector.setModelTypeAsTinyYOLOv3()
-video_detector.setModelPath(os.path.join(execution_path, "yolo-tiny.h5"))
+video_detector.setModelPath(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'models\yolo-tiny.h5'))
 video_detector.loadModel()
 
 video_file_name = sys.argv[1]

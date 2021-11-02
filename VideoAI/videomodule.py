@@ -82,14 +82,14 @@ def int2hex(number, bits):
 # TODO: Rename this to something more specific.  Search and replace for it because it is used a few times
 class VideoModuleFactory(IngestModuleFactoryAdapter):
     # TODO: give it a unique name.  Will be shown in module list, logs, etc.
-    moduleName = "Trying Hardest - VideoAnalysis"
+    moduleName = "Trying Hardest - Video Analyser"
 
     def getModuleDisplayName(self):
         return self.moduleName
 
     # TODO: Give it a description
     def getModuleDescription(self):
-        return "This module utilizes imageai to analysis object in video."
+        return "This module utilizes imageai to analyse objects in videos."
 
     def getModuleVersionNumber(self):
         return "1.0"
