@@ -82,7 +82,7 @@ pip install tensorflow==2.4.0 keras==2.4.3 numpy==1.19.3 pillow==7.0.0 scipy==1.
 pip install deepspeech pydub webrtcvad
 ```
 #### Others
-- [**FFMPEG**](https://www.ffmpeg.org/download.html) to support conversion between `.mp3` `.mp4` to `.wav` for processing
+- [**FFMPEG**](https://www.ffmpeg.org/download.html) to support conversion between `.mp3` to `.wav` for processing
 - **DeepSpeech** Model to be downloaded and selected when prompted
   - [deepspeech-0.9.3-models.pbmm](https://github.com/mozilla/DeepSpeech/releases/tag/v0.9.3)
   - [deepspeech-0.9.3-models.scorer](https://github.com/mozilla/DeepSpeech/releases/tag/v0.9.3)
