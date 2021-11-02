@@ -1,1 +1,9 @@
-Import module "yolo-tiny.h5" from ImageAI folder
+Ensure dependency are installed (same as ImageAI dependency)
+
+1. Import Video Analysis into Tools -> Python Plugins
+2. Under Tools -> Run injest modules - > select the disk/image you wish the video analysis to run on
+3. There will be a percentage show at the bottom of autopsy which indicate the progression of analysising
+4. After finished video analysising, Refer to Analysis Results - > Interesting Items -> Video Analysis Results -> Interesting Files
+5. The Interesting files will list down all the (.mp4) format and indicate under Object File which showcase what is inside the video
+
+Noted - Video Analysising will take a while, this is because of frames by frames analysis in the video
