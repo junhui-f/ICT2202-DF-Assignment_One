@@ -54,7 +54,7 @@ import tempfile
 
 ModelFilePath = "models/deepspeech.pbmm"
 ScorerFilePath = "models/deepspeech.scorer"
-beam_width = "100"
+beam_width = "500"
 lm_alpha = "0.93"
 lm_beta = "1.18"
 enableVAD = "1"
@@ -404,7 +404,7 @@ class GUI_UISettingsPanel(IngestModuleIngestJobSettingsPanel):
         self.gbPanel0.setConstraints( self.label_beam_width, self.gbcPanel0 )
         self.panel0.add(self.label_beam_width)
 
-        self.beam_width_TF = JTextField("100",20)
+        self.beam_width_TF = JTextField("500",20)
         self.beam_width_TF.getDocument().insertUpdate = self.beam_width_mod
         self.beam_width_TF.getDocument().removeUpdate = self.beam_width_mod
         self.beam_width_TF.getDocument().changedUpdate = self.beam_width_mod
