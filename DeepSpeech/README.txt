@@ -23,7 +23,6 @@ Output:
 
 python AudioToText.py <Model(.pbmm) file path> <Scorer(.scorer) file path> <beam_width> <lm_alpha> <lm_beta> <EnableVAD?:1/0> <VADSTRICTNESS:0~3> <FilePath(s)>
 
-
 Usage:
 Model File: The file path of the model file (.pbmm). 
   By default, path of model file is set to 'models/deepspeech.pbmm'
