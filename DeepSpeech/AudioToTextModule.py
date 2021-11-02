@@ -141,16 +141,16 @@ class AudioToTextModuleFactory(IngestModuleFactoryAdapter):
         self.settings = settings
         return GUI_TestWithUISettingsPanel(self.settings)
 
-    def isDataSourceIngestModuleFactory(self):
+    def isFileIngestModuleFactory(self):
         return True
 
-    def createDataSourceIngestModule(self, ingestOptions):
+    def createFileIngestModule(self, ingestOptions):
         return AudioToTextModule(self.settings)
 
 # Data Source-level ingest module.  One gets created per data source.
-class AudioToTextModule(DataSourceIngestModule):
+class AudioToTextModule(FileIngestModule):
 
-    _logger = Logger.getLogger(GUI_TestIngestModuleFactory.moduleName)
+    _logger = Logger.getLogger(AudioToTextModuleFactory.moduleName)
 
     def log(self, level, msg):
         self._logger.logp(level, self.__class__.__name__, inspect.stack()[1][3], msg)
@@ -166,7 +166,7 @@ class AudioToTextModule(DataSourceIngestModule):
     def startUp(self, context):
         self.filesFound = 0
         self.context = context
-        
+
         # Throw an IngestModule.IngestModuleException exception if there was a problem setting up
         # raise IngestModuleException(IngestModule(), "Oh No!")
         pass
