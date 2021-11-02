@@ -39,7 +39,6 @@ from subprocess import Popen, PIPE
 from javax.swing import JCheckBox
 from javax.swing import JButton
 from javax.swing import ButtonGroup
-from javax.swing import JComboBox
 from javax.swing import JList
 from javax.swing import JTextArea
 from javax.swing import JTextField
@@ -64,7 +63,6 @@ from org.sleuthkit.datamodel import BlackboardArtifact
 from org.sleuthkit.datamodel import BlackboardAttribute
 from org.sleuthkit.autopsy.ingest import IngestModule
 from org.sleuthkit.autopsy.ingest.IngestModule import IngestModuleException
-from org.sleuthkit.autopsy.ingest import DataSourceIngestModule
 from org.sleuthkit.autopsy.ingest import IngestModuleFactoryAdapter
 from org.sleuthkit.autopsy.ingest import GenericIngestModuleJobSettings
 from org.sleuthkit.autopsy.ingest import IngestModuleIngestJobSettingsPanel
@@ -86,6 +84,14 @@ import binascii
 import re
 import subprocess
 import tempfile
+
+ModelFilePath = "x"
+ScorerFilePath = "d"
+beam_width = "100"
+lm_alpha = "0.93"
+lm_beta = "1.18"
+enableVAD = "1"
+vadStrictness = "3"
 
 def findLen(str1):
     counter = 0    
@@ -143,7 +149,7 @@ class AudioToTextModuleFactory(IngestModuleFactoryAdapter):
         return AudioToTextModule(self.settings)
 
 # Data Source-level ingest module.  One gets created per data source.
-class AudioToTextModule(DataSourceIngestModule):
+class AudioToTextModule(FileIngestModule):
 
     _logger = Logger.getLogger(AudioToTextModuleFactory.moduleName)
 
@@ -162,11 +168,6 @@ class AudioToTextModule(DataSourceIngestModule):
         self.filesFound = 0
         self.context = context
 
-        Combo_Box_entry = self.local_settings.getSetting('ComboBox')
-        self.log(Level.INFO, "Combo Box Entry Starts here =====>")
-        self.log(Level.INFO, self.local_settings.getSetting('ComboBox'))
-        self.log(Level.INFO, "<====== Combo Box Entry Ends here")
-
         # Throw an IngestModule.IngestModuleException exception if there was a problem setting up
         # raise IngestModuleException(IngestModule(), "Oh No!")
         pass
@@ -177,6 +178,15 @@ class AudioToTextModule(DataSourceIngestModule):
     # 'progressBar' is of type org.sleuthkit.autopsy.ingest.DataSourceIngestModuleProgress
     # See: http://sleuthkit.org/autopsy/docs/api-docs/3.1/classorg_1_1sleuthkit_1_1autopsy_1_1ingest_1_1_data_source_ingest_module_progress.html
     def process(self, file):
+
+        global ModelFilePath
+        global ScorerFilePath
+        global beam_width
+        global lm_alpha
+        global lm_beta
+        global enableVAD
+        global vadStrictness
+
         # Skip non-files
         if ((file.getType() == TskData.TSK_DB_FILES_TYPE_ENUM.UNALLOC_BLOCKS) or
             (file.getType() == TskData.TSK_DB_FILES_TYPE_ENUM.UNUSED_BLOCKS) or
@@ -218,7 +228,8 @@ class AudioToTextModule(DataSourceIngestModule):
                     f.write(str(binascii.unhexlify(hexValue)))
 
             #Call python script                      
-            commandToCall = 'python AudioToText.py ' + '\"' + str(file.getName()) + '\"'
+            #commandToCall = 'python AudioToText.py ' + '\"' + str(file.getName()) + '\"'
+            commandToCall = 'python AudioToText.py' + ' \"' + ModelFilePath + '\"' + ' \"' + ScorerFilePath + '\"' + ' ' + beam_width + ' ' + lm_alpha + ' ' + lm_beta +  ' ' + enableVAD + ' ' + vadStrictness + ' \"' + str(file.getName()) + '\"'
             try: 
                 transcript = subprocess.check_output(commandToCall, shell=True, cwd=file_dir)
             except: 
@@ -226,7 +237,7 @@ class AudioToTextModule(DataSourceIngestModule):
             
             os.remove(tempFile)
 
-            if transcript.strip().decode("utf-8") == 'Does not contain any speech.' or transcript.strip().decode("utf-8") == 'Error':
+            if transcript.strip().decode("utf-8") == 'Does not contain any speech.' or transcript.strip().decode("utf-8") == 'Errors':
                 return IngestModule.ProcessResult.OK
 
             # Make an artifact on the blackboard.  TSK_INTERESTING_FILE_HIT is a generic type of
@@ -294,7 +305,7 @@ class GUI_TestWithUISettingsPanel(IngestModuleIngestJobSettingsPanel):
     
     # Select Model File onClick Event
     def selectModelFile(self, e):
-
+        global ModelFilePath
         chooseFile = JFileChooser()
         filter = FileNameExtensionFilter(".pbmm", ["pbmm"])
         chooseFile.setAcceptAllFileFilterUsed(False);
@@ -305,10 +316,11 @@ class GUI_TestWithUISettingsPanel(IngestModuleIngestJobSettingsPanel):
             file = chooseFile.getSelectedFile()
             Canonical_file = file.getCanonicalPath()
             self.ModelFile_TF.setText(Canonical_file)
+            ModelFilePath = Canonical_file
 
     # Select Scorer File onClick Event
     def selectScorerFile(self, e):
-
+        global ScorerFilePath
         chooseFile = JFileChooser()
         filter = FileNameExtensionFilter(".scorer", ["scorer"])
         chooseFile.setAcceptAllFileFilterUsed(False);
@@ -319,29 +331,37 @@ class GUI_TestWithUISettingsPanel(IngestModuleIngestJobSettingsPanel):
             file = chooseFile.getSelectedFile()
             Canonical_file = file.getCanonicalPath()
             self.ScorerFile_TF.setText(Canonical_file)
+            ScorerFilePath = Canonical_file
 
     # Modify beam_width field event
     def beam_width_mod(self, e):
-        self.ScorerFile_TF.setText("1")
+        global beam_width
+        beam_width = self.beam_width_TF.getText()
 
     # Modify lm_alpha field event
     def lm_alpha_mod(self, e):
-        self.ScorerFile_TF.setText("2")
+        global lm_alpha
+        lm_alpha = self.lm_alpha_TF.getText()
 
     # Modify lm_beta field event
     def lm_beta_mod(self, e):
-        self.ScorerFile_TF.setText("3")
+        global lm_beta
+        lm_beta = self.lm_beta_TF.getText()
 
     # Check if VAD is enabled
     def checkVAD(self, e):
+        global enableVAD
         if self.vad_CheckBox.isSelected():
-            self.VAD_CB.setEnabled(True)
+            enableVAD = "1"
+            self.vad_TF.setEnabled(True)
         else:
-            self.VAD_CB.setEnabled(False)
+            enableVAD = "0"
+            self.vad_TF.setEnabled(False)
 
     # Modify VAD Verbosity Event
     def modifyVAD(self, e):
-        self.ScorerFile_TF.setText("4")
+        global vadStrictness
+        vadStrictness = self.vad_TF.getText()
 
     # TODO: Update this for your UI
     def initComponents(self):
@@ -473,7 +493,7 @@ class GUI_TestWithUISettingsPanel(IngestModuleIngestJobSettingsPanel):
         self.gbPanel0.setConstraints( self.label_lm_alpha, self.gbcPanel0 )
         self.panel0.add(self.label_lm_alpha)
 
-        self.lm_alpha_TF = JTextField("100",20)
+        self.lm_alpha_TF = JTextField("0.93",20)
         self.lm_alpha_TF.getDocument().insertUpdate = self.lm_alpha_mod
         self.lm_alpha_TF.getDocument().removeUpdate = self.lm_alpha_mod
         self.lm_alpha_TF.getDocument().changedUpdate = self.lm_alpha_mod
@@ -501,7 +521,7 @@ class GUI_TestWithUISettingsPanel(IngestModuleIngestJobSettingsPanel):
         self.gbPanel0.setConstraints( self.label_lm_beta, self.gbcPanel0 )
         self.panel0.add(self.label_lm_beta)
 
-        self.lm_beta_TF = JTextField("100",20)
+        self.lm_beta_TF = JTextField("1.18",20)
         self.lm_beta_TF.getDocument().insertUpdate = self.lm_beta_mod
         self.lm_beta_TF.getDocument().removeUpdate = self.lm_beta_mod
         self.lm_beta_TF.getDocument().changedUpdate = self.lm_beta_mod
@@ -517,7 +537,7 @@ class GUI_TestWithUISettingsPanel(IngestModuleIngestJobSettingsPanel):
         self.panel0.add( self.lm_beta_TF ) 
 
         # Sixth Row: Enable VAD (T/F) w. Verbosity
-        self.vad_CheckBox = JCheckBox( "Enable VAD", actionPerformed=self.checkVAD)
+        self.vad_CheckBox = JCheckBox( "Enable VAD (0-3)", actionPerformed=self.checkVAD)
         self.vad_CheckBox.setSelected(True)
         self.gbcPanel0.gridx = 2 
         self.gbcPanel0.gridy = 27 
@@ -530,19 +550,20 @@ class GUI_TestWithUISettingsPanel(IngestModuleIngestJobSettingsPanel):
         self.gbPanel0.setConstraints( self.vad_CheckBox, self.gbcPanel0 ) 
         self.panel0.add( self.vad_CheckBox ) 
 
-        self.dataVAD_CB = ("Low", "Medium", "High", "Very High")
-        self.VAD_CB = JComboBox( self.dataVAD_CB)
-        self.VAD_CB.itemStateChanged = self.modifyVAD      
+        self.vad_TF = JTextField("3",20)
+        self.vad_TF.getDocument().insertUpdate = self.modifyVAD
+        self.vad_TF.getDocument().removeUpdate = self.modifyVAD
+        self.vad_TF.getDocument().changedUpdate = self.modifyVAD
         self.gbcPanel0.gridx = 2 
-        self.gbcPanel0.gridy = 31 
+        self.gbcPanel0.gridy = 31
         self.gbcPanel0.gridwidth = 1 
         self.gbcPanel0.gridheight = 1 
         self.gbcPanel0.fill = GridBagConstraints.BOTH 
         self.gbcPanel0.weightx = 1 
         self.gbcPanel0.weighty = 0 
         self.gbcPanel0.anchor = GridBagConstraints.NORTH 
-        self.gbPanel0.setConstraints( self.VAD_CB, self.gbcPanel0 ) 
-        self.panel0.add( self.VAD_CB ) 
+        self.gbPanel0.setConstraints( self.vad_TF, self.gbcPanel0 ) 
+        self.panel0.add( self.vad_TF ) 
 
         self.add(self.panel0)
 
