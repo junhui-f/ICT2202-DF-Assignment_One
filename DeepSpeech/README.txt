@@ -41,4 +41,5 @@ lm_beta: Word insertion weight.
   By default, the value of lm_beta is set to 1.18.
   
 Enable VAD: Voice Activity Detection. When enabled, attempts to only transcribe audio files that might contain speech, rather than every audio file.
-  By default, VAD is enabled. Strictness value ranges from 0~3, a lower strictness value generates better results at the cost of decoding time.
+  By default, VAD is enabled, and strictness set to 3.
+  Strictness value ranges from 0~3, a lower strictness value generates better results at the cost of decoding time.
