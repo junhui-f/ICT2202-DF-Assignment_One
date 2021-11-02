@@ -152,10 +152,8 @@ class AudioToTextModule(FileIngestModule):
 
         # We will flag files with .wav or mp3 in the name and make a blackboard artifact.
         if file.getName().lower().endswith(".wav") or file.getName().lower().endswith(".mp3"):            
-            self.log(Level.INFO, "DEBUG3")            
-
+            self.log(Level.INFO, "DEBUG3")
             self.log(Level.INFO, "Found an audio file: " + file.getName())
-            self.filesFound+=1
 
             ##Extract audio begins here
             inputStream = ReadContentInputStream(file)
@@ -205,6 +203,7 @@ class AudioToTextModule(FileIngestModule):
             atribute=BlackboardAttribute(attId, AudioToTextModuleFactory.moduleName, transcript.strip().decode("utf-8"))
             art.addAttribute(att)
             art.addAttribute(atribute)
+            self.filesFound +=1
 
             try:
                 # index the artifact for keyword search
