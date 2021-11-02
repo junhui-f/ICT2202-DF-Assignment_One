@@ -8,7 +8,7 @@ import webrtcvad
 import contextlib
 
 # If additional file names are not provided
-if len(sys.argv) < 9: 
+if len(sys.argv) < 9:
     print("Usage: python AudioToText.py <Model(.pbmm) file path> <Scorer(.scorer) file path> <beam_width> <lm_alpha> <lm_beta> <EnableVAD?:1/0> <VADSTRICTNESS:0~3> <FilePath(s)>")
     # python AudioToText.py modelFile scorerFile beam_width lm_alpha lm_beta VAD(1/0) VADSTRICTNESS filepath
     # ######    argv[0]       argv[1]    argv[2]    argv[3]   argv[4] argv[5] argv[6]     argv[7]     argv[8]
