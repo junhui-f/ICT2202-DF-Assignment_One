@@ -48,6 +48,7 @@ from javax.swing import JLabel
 from java.awt import GridLayout
 from java.awt import GridBagLayout
 from java.awt import GridBagConstraints
+from java.awt import Color
 from javax.swing import JPanel
 from javax.swing import JScrollPane
 from javax.swing import JFileChooser
