@@ -90,16 +90,16 @@ class ImageAIModuleFactory(IngestModuleFactoryAdapter):
         self.settings = None
 
     moduleName = "Trying Hardest - Image Analyser"
-    
+
     def getModuleDisplayName(self):
         return self.moduleName
-    
+
     def getModuleDescription(self):
-        return "This modile utilizes imageAI to detect objects within images and Facial Recognition to search for specific person through the images found"
-    
+        return "This module utilizes imageAI to detect objects within images and Facial Recognition to search for specific person through the images found"
+
     def getModuleVersionNumber(self):
         return "1.0"
-    
+
     def getDefaultIngestJobSettings(self):
         return GenericIngestModuleJobSettings()
 
@@ -138,12 +138,12 @@ class ImageAIModule(FileIngestModule):
     def startUp(self, context):
         self.filesFound = 0
         self.context = context
-        
+
         Combo_Box_entry = self.local_settings.getSetting('ComboBox')
         self.log(Level.INFO, "Combo Box Entry Starts here =====>")
         self.log(Level.INFO, self.local_settings.getSetting('ComboBox'))
         self.log(Level.INFO, "<====== Combo Box Entry Ends here")
-        
+
         # list_box_entry = self.local_settings.getSetting('ListBox').split(",")
         # self.log(Level.INFO, "List Box Entry Starts here =====>")
         # self.log(Level.INFO, str(list_box_entry))
@@ -157,17 +157,17 @@ class ImageAIModule(FileIngestModule):
             self.path_to_import_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), self.local_settings.getSetting('File_Imp_TF'))
             if not os.path.exists(self.path_to_import_file):
                raise IngestModuleException("File to import is not available")
-        
+
         if self.local_settings.getSetting('Facial_Rec_Flag') == 'true':
             self.log(Level.INFO, self.local_settings.getSetting('ExecFile'))
             self.path_to_exe = os.path.join(os.path.dirname(os.path.abspath(__file__)), self.local_settings.getSetting('ExecFile'))
             if not os.path.exists(self.path_to_exe):
                raise IngestModuleException("File to Run/execute does not exist.")
-        
-        
+
+
         #self.logger.logp(Level.INFO, GUI_TestWithUI.__name__, "startUp", str(self.List_Of_Events))
         #self.log(Level.INFO, str(self.List_Of_GUI_Test))
-        
+
         # Throw an IngestModule.IngestModuleException exception if there was a problem setting up
         # raise IngestModuleException(IngestModule(), "Oh No!")
         pass
@@ -181,7 +181,7 @@ class ImageAIModule(FileIngestModule):
         #globals to check if checkbox is ticked and get file path of selected image
         global doFacialRec
         global facialRecTargetImgPath
-    
+
         if not os.path.exists(tempDir):
             os.makedirs(tempDir)
 
@@ -232,7 +232,7 @@ class ImageAIModule(FileIngestModule):
 
             if str(imgResultStdOut) == '':
                 imgResultStdOut = 'Unknown'
-        
+
             #Call the facial recognition script
             facialRecStdOut = "default facialRecStdOut"
             if doFacialRec is True:
@@ -247,13 +247,13 @@ class ImageAIModule(FileIngestModule):
                   ImageAIModuleFactory.moduleName, "Image analysed")
 
             attId = blackboard.getOrAddAttributeType("Image analysis", BlackboardAttribute.TSK_BLACKBOARD_ATTRIBUTE_VALUE_TYPE.STRING, "Image analysis")
-            atribute = BlackboardAttribute(attId, ImageAIModuleFactory.moduleName, str(imgResultStdOut))            
+            atribute = BlackboardAttribute(attId, ImageAIModuleFactory.moduleName, str(imgResultStdOut))
             art.addAttribute(atribute)
 
             if doFacialRec is True:
                 attId2 = blackboard.getOrAddAttributeType("Facial recognition", BlackboardAttribute.TSK_BLACKBOARD_ATTRIBUTE_VALUE_TYPE.STRING, "Facial recognition")
                 atribute2 = BlackboardAttribute(attId2, ImageAIModuleFactory.moduleName, str(facialRecStdOut))
-                art.addAttribute(atribute2)                
+                art.addAttribute(atribute2)
 
             art.addAttribute(att)
 
@@ -283,8 +283,8 @@ class ImageAIModule(FileIngestModule):
             # f.write('filname:'+fileName + '\n' + str(doFacialRec) + '\nfacialRecTargetImgPath' + str(facialRecTargetImgPath) + '\nFacialRecStdout:' + facialRecStdOut)
             # f.close()
 
-        return IngestModule.ProcessResult.OK              
-        
+        return IngestModule.ProcessResult.OK
+
     # Where any shutdown code is run and resources are freed.
     # TODO: Add any shutdown code that you need here.
     def shutDown(self):
@@ -295,7 +295,7 @@ class ImageAIModule(FileIngestModule):
         ingestServices = IngestServices.getInstance().postMessage(message)
         cleanUp()
 
-        
+
 # UI that is shown to user for each ingest job so they can configure the job.
 # TODO: Rename this
 class GUI_TestWithUISettingsPanel(IngestModuleIngestJobSettingsPanel):
@@ -307,7 +307,7 @@ class GUI_TestWithUISettingsPanel(IngestModuleIngestJobSettingsPanel):
     # is present, it creates a read-only 'settings' property. This auto-
     # generated read-only property overshadows the instance-variable -
     # 'settings'
-    
+
     # We get passed in a previous version of the settings so that we can
     # prepopulate the UI
     # TODO: Update this for your UI
@@ -315,7 +315,7 @@ class GUI_TestWithUISettingsPanel(IngestModuleIngestJobSettingsPanel):
         self.local_settings = settings
         self.initComponents()
         self.customizeComponents()
-    
+
     # TODO: Update this for your UI
     def checkBoxEvent(self, event):
         global doFacialRec
@@ -332,19 +332,19 @@ class GUI_TestWithUISettingsPanel(IngestModuleIngestJobSettingsPanel):
             doFacialRec = False
 
     def keyPressed(self, event):
-        self.local_settings.setSetting('Area', self.area.getText()) 
+        self.local_settings.setSetting('Area', self.area.getText())
 
     def onchange_cb(self, event):
-        self.local_settings.setSetting('ComboBox', event.item) 
+        self.local_settings.setSetting('ComboBox', event.item)
         #self.Error_Message.setText(event.item)
 
     def onchange_lb(self, event):
         self.local_settings.setSetting('ListBox', "")
         list_selected = self.List_Box_LB.getSelectedValuesList()
-        self.local_settings.setSetting('ListBox', str(list_selected))      
+        self.local_settings.setSetting('ListBox', str(list_selected))
 
     def onClick(self, e):
-       global facialRecTargetImgPath    
+       global facialRecTargetImgPath
        chooseFile = JFileChooser()
 
        ret = chooseFile.showDialog(self.panel0, "Select Target Face Image")
@@ -365,50 +365,50 @@ class GUI_TestWithUISettingsPanel(IngestModuleIngestJobSettingsPanel):
     def initComponents(self):
         self.panel0 = JPanel()
 
-        self.rbgPanel0 = ButtonGroup() 
-        self.gbPanel0 = GridBagLayout() 
-        self.gbcPanel0 = GridBagConstraints() 
-        self.panel0.setLayout( self.gbPanel0 ) 
+        self.rbgPanel0 = ButtonGroup()
+        self.gbPanel0 = GridBagLayout()
+        self.gbcPanel0 = GridBagConstraints()
+        self.panel0.setLayout( self.gbPanel0 )
 
         self.Exec_Program_CB = JCheckBox("Targeted Facial Recognition", actionPerformed=self.checkBoxEvent)
-        self.gbcPanel0.gridx = 2 
-        self.gbcPanel0.gridy = 1 
-        self.gbcPanel0.gridwidth = 1 
-        self.gbcPanel0.gridheight = 1 
-        self.gbcPanel0.fill = GridBagConstraints.BOTH 
-        self.gbcPanel0.weightx = 1 
-        self.gbcPanel0.weighty = 0 
-        self.gbcPanel0.anchor = GridBagConstraints.NORTH 
-        self.gbPanel0.setConstraints( self.Exec_Program_CB, self.gbcPanel0 ) 
-        self.panel0.add( self.Exec_Program_CB ) 
+        self.gbcPanel0.gridx = 2
+        self.gbcPanel0.gridy = 1
+        self.gbcPanel0.gridwidth = 1
+        self.gbcPanel0.gridheight = 1
+        self.gbcPanel0.fill = GridBagConstraints.BOTH
+        self.gbcPanel0.weightx = 1
+        self.gbcPanel0.weighty = 0
+        self.gbcPanel0.anchor = GridBagConstraints.NORTH
+        self.gbPanel0.setConstraints( self.Exec_Program_CB, self.gbcPanel0 )
+        self.panel0.add( self.Exec_Program_CB )
 
-        self.Program_Executable_TF = JTextField(20) 
+        self.Program_Executable_TF = JTextField(20)
         self.Program_Executable_TF.setEnabled(True)
-        self.gbcPanel0.gridx = 2 
-        self.gbcPanel0.gridy = 3 
-        self.gbcPanel0.gridwidth = 1 
-        self.gbcPanel0.gridheight = 1 
-        self.gbcPanel0.fill = GridBagConstraints.BOTH 
-        self.gbcPanel0.weightx = 1 
-        self.gbcPanel0.weighty = 0 
-        self.gbcPanel0.anchor = GridBagConstraints.NORTH 
-        self.gbPanel0.setConstraints( self.Program_Executable_TF, self.gbcPanel0 ) 
-        self.panel0.add( self.Program_Executable_TF ) 
+        self.gbcPanel0.gridx = 2
+        self.gbcPanel0.gridy = 3
+        self.gbcPanel0.gridwidth = 1
+        self.gbcPanel0.gridheight = 1
+        self.gbcPanel0.fill = GridBagConstraints.BOTH
+        self.gbcPanel0.weightx = 1
+        self.gbcPanel0.weighty = 0
+        self.gbcPanel0.anchor = GridBagConstraints.NORTH
+        self.gbPanel0.setConstraints( self.Program_Executable_TF, self.gbcPanel0 )
+        self.panel0.add( self.Program_Executable_TF )
 
         self.Find_Program_Exec_BTN = JButton( "Select", actionPerformed=self.onClick)
         self.Find_Program_Exec_BTN.setEnabled(True)
-        self.rbgPanel0.add( self.Find_Program_Exec_BTN ) 
-        self.gbcPanel0.gridx = 6 
-        self.gbcPanel0.gridy = 3 
-        self.gbcPanel0.gridwidth = 1 
-        self.gbcPanel0.gridheight = 1 
-        self.gbcPanel0.fill = GridBagConstraints.BOTH 
-        self.gbcPanel0.weightx = 1 
-        self.gbcPanel0.weighty = 0 
-        self.gbcPanel0.anchor = GridBagConstraints.NORTH 
-        self.gbPanel0.setConstraints( self.Find_Program_Exec_BTN, self.gbcPanel0 ) 
-        self.panel0.add( self.Find_Program_Exec_BTN ) 
-        
+        self.rbgPanel0.add( self.Find_Program_Exec_BTN )
+        self.gbcPanel0.gridx = 6
+        self.gbcPanel0.gridy = 3
+        self.gbcPanel0.gridwidth = 1
+        self.gbcPanel0.gridheight = 1
+        self.gbcPanel0.fill = GridBagConstraints.BOTH
+        self.gbcPanel0.weightx = 1
+        self.gbcPanel0.weighty = 0
+        self.gbcPanel0.anchor = GridBagConstraints.NORTH
+        self.gbPanel0.setConstraints( self.Find_Program_Exec_BTN, self.gbcPanel0 )
+        self.panel0.add( self.Find_Program_Exec_BTN )
+
         self.add(self.panel0)
 
     # TODO: Update this for your UI
