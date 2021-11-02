@@ -200,9 +200,9 @@ class AudioIngestModule(FileIngestModule):
             # artifact.  Refer to the developer docs for other examples.
             art = file.newArtifact(BlackboardArtifact.ARTIFACT_TYPE.TSK_INTERESTING_FILE_HIT)
             att = BlackboardAttribute(BlackboardAttribute.ATTRIBUTE_TYPE.TSK_SET_NAME,
-                  AudioToTextModuleFactory.moduleName, "Audio with Speech Found")
+                  AudioIngestModuleFactory.moduleName, "Audio with Speech Found")
             attId = blackboard.getOrAddAttributeType("TranscribedText", BlackboardAttribute.TSK_BLACKBOARD_ATTRIBUTE_VALUE_TYPE.STRING, "Transcribed Text")
-            atribute=BlackboardAttribute(attId, AudioToTextModuleFactory.moduleName, transcript.strip().decode("utf-8"))
+            atribute=BlackboardAttribute(attId, AudioIngestModuleFactory.moduleName, transcript.strip().decode("utf-8"))
             art.addAttribute(att)
             art.addAttribute(atribute)
 
@@ -214,7 +214,7 @@ class AudioIngestModule(FileIngestModule):
 
             # Fire an event to notify the UI and others that there is a new artifact
             IngestServices.getInstance().fireModuleDataEvent(
-                ModuleDataEvent(AudioToTextModuleFactory.moduleName,
+                ModuleDataEvent(AudioIngestModuleFactory.moduleName,
                     BlackboardArtifact.ARTIFACT_TYPE.TSK_INTERESTING_FILE_HIT, None))
 
             # For the example (this wouldn't be needed normally), we'll query the blackboard for data that was added
@@ -233,7 +233,7 @@ class AudioIngestModule(FileIngestModule):
     def shutDown(self):
         # As a final part of this example, we'll send a message to the ingest inbox with the number of files found (in this thread)
         message = IngestMessage.createMessage(
-            IngestMessage.MessageType.DATA, AudioToTextModuleFactory.moduleName,
+            IngestMessage.MessageType.DATA, AudioIngestModuleFactory.moduleName,
                 str(self.filesFound) + " files found")
         ingestServices = IngestServices.getInstance().postMessage(message)    
 
