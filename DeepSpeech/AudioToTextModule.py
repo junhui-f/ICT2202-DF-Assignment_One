@@ -111,12 +111,11 @@ def int2hex(number, bits):
 
 # Factory that defines the name and details of the module and allows Autopsy
 # to create instances of the modules that will do the analysis.
-class GUI_TestIngestModuleFactory(IngestModuleFactoryAdapter):
+class AudioIngestModuleFactory(IngestModuleFactoryAdapter):
 
     def __init__(self):
         self.settings = None
 
-    # TODO: give it a unique name.  Will be shown in module list, logs, etc.
     moduleName = "Trying Hardest - AudioToText"
     
     def getModuleDisplayName(self):
@@ -141,16 +140,16 @@ class GUI_TestIngestModuleFactory(IngestModuleFactoryAdapter):
         self.settings = settings
         return GUI_TestWithUISettingsPanel(self.settings)
 
-    def isDataSourceIngestModuleFactory(self):
+    def isFileIngestModuleFactory(self):
         return True
 
-    def createDataSourceIngestModule(self, ingestOptions):
-        return AudioToTextModule(self.settings)
+    def createFileIngestModule(self, ingestOptions):
+        return AudioIngestModule(self.settings)
 
 # Data Source-level ingest module.  One gets created per data source.
-class GUI_TestIngestModule(FileIngestModule):
+class AudioIngestModule(FileIngestModule):
 
-    _logger = Logger.getLogger(GUI_TestIngestModuleFactory.moduleName)
+    _logger = Logger.getLogger(AudioIngestModuleFactory.moduleName)
 
     def log(self, level, msg):
         self._logger.logp(level, self.__class__.__name__, inspect.stack()[1][3], msg)
@@ -166,6 +165,7 @@ class GUI_TestIngestModule(FileIngestModule):
     def startUp(self, context):
         self.filesFound = 0
         self.context = context
+
 
         # Throw an IngestModule.IngestModuleException exception if there was a problem setting up
         # raise IngestModuleException(IngestModule(), "Oh No!")
