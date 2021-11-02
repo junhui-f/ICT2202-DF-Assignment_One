@@ -102,9 +102,11 @@ def int2hex(number, bits):
         return hex(number)
 
 # Factory that defines the name and details of the module and allows Autopsy
-# to create instances of the modules that will do the anlaysis.
-# TODO: Rename this to something more specific.  Search and replace for it because it is used a few times
-class AudioToTextModuleFactory(IngestModuleFactoryAdapter):
+# to create instances of the modules that will do the analysis.
+class GUI_TestIngestModuleFactory(IngestModuleFactoryAdapter):
+
+    def __init__(self):
+        self.settings = None
 
     # TODO: give it a unique name.  Will be shown in module list, logs, etc.
     moduleName = "Trying Hardest - AudioToText"
@@ -115,10 +117,10 @@ class AudioToTextModuleFactory(IngestModuleFactoryAdapter):
     # TODO: Give it a description
     def getModuleDescription(self):
         return "This module utilizes DeepSpeech to convert audio to text."
-
+    
     def getModuleVersionNumber(self):
         return "1.0"
-
+    
     def getDefaultIngestJobSettings(self):
         return GenericIngestModuleJobSettings()
 
@@ -140,13 +142,10 @@ class AudioToTextModuleFactory(IngestModuleFactoryAdapter):
     def createFileIngestModule(self, ingestOptions):
         return AudioToTextModule(self.settings)
 
+# Data Source-level ingest module.  One gets created per data source.
+class GUI_TestIngestModule(DataSourceIngestModule):
 
-# File-level ingest module.  One gets created per thread.
-# TODO: Rename this to something more specific. Could just remove "Factory" from above name.
-# Looks at the attributes of the passed in file.
-class AudioToTextModule(FileIngestModule):
-
-    _logger = Logger.getLogger(AudioToTextModuleFactory.moduleName)
+    _logger = Logger.getLogger(GUI_TestIngestModuleFactory.moduleName)
 
     def log(self, level, msg):
         self._logger.logp(level, self.__class__.__name__, inspect.stack()[1][3], msg)
@@ -158,8 +157,7 @@ class AudioToTextModule(FileIngestModule):
 
     # Where any setup and configuration is done
     # 'context' is an instance of org.sleuthkit.autopsy.ingest.IngestJobContext.
-    # See: http://sleuthkit.org/autopsy/docs/api-docs/4.6.0/classorg_1_1sleuthkit_1_1autopsy_1_1ingest_1_1_ingest_job_context.html
-    # TODO: Add any setup code that you need here.
+    # See: http://sleuthkit.org/autopsy/docs/api-docs/3.1/classorg_1_1sleuthkit_1_1autopsy_1_1ingest_1_1_ingest_job_context.html
     def startUp(self, context):
         self.filesFound = 0
         self.context = context
@@ -170,13 +168,14 @@ class AudioToTextModule(FileIngestModule):
         self.log(Level.INFO, "<====== Combo Box Entry Ends here")
 
         # Throw an IngestModule.IngestModuleException exception if there was a problem setting up
-        # raise IngestModuleException("Oh No!")
+        # raise IngestModuleException(IngestModule(), "Oh No!")
         pass
 
-    # Where the analysis is done.  Each file will be passed into here.
-    # The 'file' object being passed in is of type org.sleuthkit.datamodel.AbstractFile.
-    # See: http://www.sleuthkit.org/sleuthkit/docs/jni-docs/4.6.0/classorg_1_1sleuthkit_1_1datamodel_1_1_abstract_file.html
-    # TODO: Add your analysis code in here.
+    # Where the analysis is done.
+    # The 'dataSource' object being passed in is of type org.sleuthkit.datamodel.Content.
+    # See:x http://www.sleuthkit.org/sleuthkit/docs/jni-docs/interfaceorg_1_1sleuthkit_1_1datamodel_1_1_content.html
+    # 'progressBar' is of type org.sleuthkit.autopsy.ingest.DataSourceIngestModuleProgress
+    # See: http://sleuthkit.org/autopsy/docs/api-docs/3.1/classorg_1_1sleuthkit_1_1autopsy_1_1ingest_1_1_data_source_ingest_module_progress.html
     def process(self, file):
         # Skip non-files
         if ((file.getType() == TskData.TSK_DB_FILES_TYPE_ENUM.UNALLOC_BLOCKS) or
@@ -270,7 +269,8 @@ class AudioToTextModule(FileIngestModule):
         message = IngestMessage.createMessage(
             IngestMessage.MessageType.DATA, AudioToTextModuleFactory.moduleName,
                 str(self.filesFound) + " files found")
-        ingestServices = IngestServices.getInstance().postMessage(message)
+        ingestServices = IngestServices.getInstance().postMessage(message)    
+
 
 # UI that is shown to user for each ingest job so they can configure the job.
 # TODO: Rename this
