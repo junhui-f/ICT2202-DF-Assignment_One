@@ -52,6 +52,9 @@ The project aims to create plug-ins for the **Autopsy - Digital Forensics** plat
 Due to potential conflicts in dependency versions it is **highly** recommended that you install the following files in the provided sequence.
 
 ### 1. The basics
+
+Ensure you have Python `3.7` installed! [Download here](https://www.python.org/downloads/release/python-379/)
+
 #### Python Dependencies
 ```
 pip install --upgrade pip
