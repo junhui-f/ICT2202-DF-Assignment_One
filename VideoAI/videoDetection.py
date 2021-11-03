@@ -9,12 +9,14 @@ video_detector.setModelPath(os.path.join(os.path.dirname(os.path.abspath(__file_
 video_detector.loadModel()
 
 video_file_name = sys.argv[1]
+detectedObjectsList = []
 
 def forSecond(frame_number, output_arrays, count_arrays, average_count, returned_frame):
-    counter = 0
+	#Detect object in the image, ignore duplicate objects
     for eachItem in average_count:
-        counter += 1
-        print (eachItem + " ")
+        if eachItem not in detectedObjectsList:
+            detectedObjectsList.append(eachItem)
+            print (eachItem)
 
 def VideoObject(video_file_name):
     video_detector.detectObjectsFromVideo(input_file_path=os.path.join(execution_path, video_file_name), output_file_path=os.path.join(execution_path, "video_second_analysis") ,  frames_per_second=20, per_second_function=forSecond,  minimum_percentage_probability=30, return_detected_frame=True, log_progress=False)
