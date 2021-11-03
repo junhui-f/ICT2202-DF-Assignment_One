@@ -1,19 +1,21 @@
-<h1 align="center"> Trying Hardest - Autopsy Media Analyser </h1>
+<h3 align="center"> Team Trying Hardest </h3>
+<h2 align="center"> Automated Media Analysis Modules for Sleuthkit Autopsy </h3>
 
-The project aims to create plug-ins for the **Autopsy - Digital Forensics** platform.
+The project aims to create **media analysis** plug-ins for the **Autopsy - Digital Forensics** platform.
+With the use of open-source machine learning engines and technologies, we have been able to create a suite of plug-ins on the Python programming language that integrates and extends the functionality of Autopsy.
 
 ### Image Analyser
 - Object Detection and Identification for still images.
 - Optional Facial Recognition.
-- Based on ImageAI
+- Based on [ImageAI](https://github.com/OlafenwaMoses/ImageAI)
 
 ### Video Analyser
 - Object detection and identification on video files.
-- Based on ImageAI
+- Based on [ImageAI](https://github.com/OlafenwaMoses/ImageAI)
 
 ### AudioToText
 - Audio to text transcription.
-- Based on DeepSpeech
+- Based on [DeepSpeech](https://github.com/mozilla/DeepSpeech)
 
 #### Project Folder Structure 
 ```
@@ -34,12 +36,12 @@ The project aims to create plug-ins for the **Autopsy - Digital Forensics** plat
 - Java `1.8` 64-bit
 - Python `3.7`
 
-#### Key validated Python libraries
+#### Key validated Python libraries versions
 > Versions and dependencies are listed within the installation guide
-- Tensorflow `2.4.0`
-- ImageAI `2.1.6`
-- Face_recognition `1.3.0`
-- DeepSpeech `0.9.3`
+- [Tensorflow](https://github.com/tensorflow/tensorflow) `2.4.0`
+- [ImageAI](https://github.com/OlafenwaMoses/ImageAI) `2.1.6`
+- [face_recognition](https://github.com/ageitgey/face_recognition) `1.3.0`
+- [DeepSpeech](https://github.com/mozilla/DeepSpeech) `0.9.3`
 
 #### Validated Models
 - ImageAI v1.0
