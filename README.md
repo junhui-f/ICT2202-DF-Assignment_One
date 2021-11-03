@@ -83,7 +83,7 @@ pip install tensorflow==2.4.0 keras==2.4.3 numpy==1.19.3 pillow==7.0.0 scipy==1.
 >
 > [CMake](https://cmake.org/)
 >
-> [Microsoft C++ (MSVC) compiler toolset](https://docs.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=msvc-160)
+> [Microsoft C++ (MSVC) compiler toolset](https://visualstudio.microsoft.com/downloads/?utm_medium=microsoft&utm_source=docs.microsoft.com&utm_campaign=button+cta&utm_content=download+vs2019+rc#build-tools-for-visual-studio-2019)
  
 ### 4. AudioToText
 #### Python Dependencies
