@@ -62,7 +62,7 @@ Ensure you have Python `3.7` installed! [Download here](https://www.python.org/d
 pip install --upgrade pip
 ```
 ```
-pip install wheel cmake
+pip install wheel
 ```
 
 ### 2. Image Analyser / Video Analyser
@@ -79,7 +79,11 @@ pip install tensorflow==2.4.0 keras==2.4.3 numpy==1.19.3 pillow==7.0.0 scipy==1.
  ```
  pip install face_recognition
  ```
-> If the install fails on **Windows** when installing `dlib` please install [Microsoft C++ (MSVC) compiler toolset](https://docs.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=msvc-160)
+> If the install fails on **Windows** when installing `dlib` please install
+>
+> [CMake](https://cmake.org/)
+>
+> [Microsoft C++ (MSVC) compiler toolset](https://docs.microsoft.com/en-us/cpp/build/building-on-the-command-line?view=msvc-160)
  
 ### 4. AudioToText
 #### Python Dependencies
