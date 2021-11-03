@@ -16,7 +16,7 @@ def forSecond(frame_number, output_arrays, count_arrays, average_count, returned
     for eachItem in average_count:
         if eachItem not in detectedObjectsList:
             detectedObjectsList.append(eachItem)
-            print (eachItem)
+            print (eachItem + " ")
 
 def VideoObject(video_file_name):
     video_detector.detectObjectsFromVideo(input_file_path=os.path.join(execution_path, video_file_name), output_file_path=os.path.join(execution_path, "video_second_analysis") ,  frames_per_second=20, per_second_function=forSecond,  minimum_percentage_probability=30, return_detected_frame=True, log_progress=False)
