@@ -53,50 +53,44 @@ With the use of open-source machine learning engines and technologies, we have b
 ## Prerequisites - Installing the support files
 Due to potential conflicts in dependency versions it is **highly** recommended that you install the following files in the provided sequence.
 
-### 1. The basics
+1. **The basics**
+    - Ensure you have Python `3.7` installed! [Download here](https://www.python.org/downloads/release/python-379/)
+    - Python Dependencies
+      ```
+      pip install --upgrade pip
+      ```
+      ```
+      pip install wheel
+      ```
+2. **Image Analyser / Video Analyser**
+     - Python Dependencies
+        ```
+        pip install tensorflow==2.4.0 keras==2.4.3 numpy==1.19.3 pillow==7.0.0 scipy==1.4.1 h5py==2.10.0 matplotlib==3.3.2 opencv-python keras-resnet==0.2.0 imageai
+        ```
+     - Others
+        - The ImageAI model has been **pre-bundled**
+        - If you wish to replace the bundled model you can do so at the plugin sub-directory `./imageAI/models/yolo-tiny.h5` and `./VideoAI/models/yolo-tiny.h5`
+3. **Facial Recognition for Image Analyser**
+    - Python Dependencies
+       ```
+       pip install face_recognition
+       ```
+    -  If the install fails on **Windows** when installing `dlib`, please install
+        - [CMake](https://cmake.org/)
+        - [Microsoft C++ (MSVC) compiler toolset](https://visualstudio.microsoft.com/downloads/?utm_medium=microsoft&utm_source=docs.microsoft.com&utm_campaign=button+cta&utm_content=download+vs2019+rc#build-tools-for-visual-studio-2019)
 
-Ensure you have Python `3.7` installed! [Download here](https://www.python.org/downloads/release/python-379/)
+4. **AudioToText**
+    - Python Dependencies
+      ```
+      pip install deepspeech pydub webrtcvad
+      ```
+    - Others
+      - [**FFMPEG**](https://www.ffmpeg.org/download.html) to support conversion between `.mp3` to `.wav` for processing
+      - **DeepSpeech** Model to be downloaded and selected when prompted
+        - [deepspeech-0.9.3-models.pbmm](https://github.com/mozilla/DeepSpeech/releases/tag/v0.9.3)
+        - [deepspeech-0.9.3-models.scorer](https://github.com/mozilla/DeepSpeech/releases/tag/v0.9.3)
 
-#### Python Dependencies
-```
-pip install --upgrade pip
-```
-```
-pip install wheel
-```
-
-### 2. Image Analyser / Video Analyser
-#### Python Dependencies
-```
-pip install tensorflow==2.4.0 keras==2.4.3 numpy==1.19.3 pillow==7.0.0 scipy==1.4.1 h5py==2.10.0 matplotlib==3.3.2 opencv-python keras-resnet==0.2.0 imageai
-```
-#### Others
-- The ImageAI model has been **pre-bundled**
-- If you wish to replace the bundled model you can do so at the plugin sub-directory `./imageAI/models/yolo-tiny.h5` and `./VideoAI/models/yolo-tiny.h5`
-
-### 3. Facial Recognition for Image Analyser
-#### Python Dependencies
- ```
- pip install face_recognition
- ```
-> If the install fails on **Windows** when installing `dlib` please install
->
-> [CMake](https://cmake.org/)
->
-> [Microsoft C++ (MSVC) compiler toolset](https://visualstudio.microsoft.com/downloads/?utm_medium=microsoft&utm_source=docs.microsoft.com&utm_campaign=button+cta&utm_content=download+vs2019+rc#build-tools-for-visual-studio-2019)
- 
-### 4. AudioToText
-#### Python Dependencies
-```
-pip install deepspeech pydub webrtcvad
-```
-#### Others
-- [**FFMPEG**](https://www.ffmpeg.org/download.html) to support conversion between `.mp3` to `.wav` for processing
-- **DeepSpeech** Model to be downloaded and selected when prompted
-  - [deepspeech-0.9.3-models.pbmm](https://github.com/mozilla/DeepSpeech/releases/tag/v0.9.3)
-  - [deepspeech-0.9.3-models.scorer](https://github.com/mozilla/DeepSpeech/releases/tag/v0.9.3)
-
-## Installation & Getting Started
+## Installation - Setting up the plugin on Autopsy
 1. Either download via
     - The release bundle [INSERT LINK HERE](http://github.com)
     - Or any other method e.g `git`
@@ -119,3 +113,6 @@ pip install deepspeech pydub webrtcvad
 3. Ensure **DeepSpeech** Models have been downloaded as per [Prerequisites - 4. AudioToText](https://github.com/junhui-f/ICT2202-DF-Assignment_One#others)
 
 4. Launch Autopsy!
+
+## User Guide - How to use the plugins
+[Insert Youtube Link Here](https://youtube.com)
