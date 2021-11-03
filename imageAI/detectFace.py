@@ -1,14 +1,12 @@
 import face_recognition
 import os, sys
 
-# python face_recog.py C:/users/Kevin/Desktop/psb.jpg C:/Users/Kevin/Desktop/faces
-
+#python detectFace.py C:/users/Kevin/Desktop/target.jpg C:/Users/Kevin/Desktop/faces C:/Users/Kevin/Desktop/faces/source.png
 targetImgPath = sys.argv[1]
 imageFolderPath = sys.argv[2]
 imageName = sys.argv[3]
 
-# print(targetImgPath, imageFolderPath)
-
+#Compares face detected in target image with another image.
 known_image = face_recognition.load_image_file(targetImgPath)
 unknown_image = face_recognition.load_image_file(imageFolderPath+'\\'+imageName)
 
