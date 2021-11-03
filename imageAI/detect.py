@@ -15,16 +15,17 @@ def detectObject(img_file_name):
 
 	detectedObjects = ""
 	detectedObjectsList = []
-
+	
+	#Detect object in the image, ignore duplicate objects
 	for eachObject in detections:
-		# print(eachObject["name"] , " : " , eachObject["percentage_probability"] )
 		if eachObject["name"] not in detectedObjectsList:
 			detectedObjectsList.append(eachObject["name"])
 			detectedObjects += eachObject["name"]
 
 			if len(detections) > 1:
 				detectedObjects += ' '
-	
+				
+	#If no objects detected, mark it as unknown
 	if len(detections) == 0:		
 		detectedObjects = 'Unknown'	
 
