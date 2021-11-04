@@ -115,4 +115,4 @@ Due to potential conflicts in dependency versions it is **highly** recommended t
 4. Launch Autopsy!
 
 ## User Guide - How to use the plugins
-[Insert Youtube Link Here](https://youtube.com)
+[A Walkthrough of the Autopsy Module Suite](https://www.youtube.com/watch?v=c7gPjzfVi5o)
