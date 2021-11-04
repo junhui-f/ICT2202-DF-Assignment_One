@@ -114,9 +114,6 @@ with SilenceStream(sys.stderr):
     model.setScorerAlphaBeta(lm_alpha, lm_beta)
     model.setBeamWidth(beam_width)
 
-# The purpose of VAD is to save time from transcibing audio files that do not even have text in the first place.
-vad = webrtcvad.Vad(3) # Integer 0-3; 0 least aggressive, 3 most.
-
 # Iterate list of files
 for file in files:
 
