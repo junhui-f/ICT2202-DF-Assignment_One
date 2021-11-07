@@ -36,7 +36,7 @@ With the use of open-source machine learning engines and technologies, we have b
 - Java `1.8` 64-bit
 - Python `3.7`
 
-#### Key validated Python libraries versions
+#### Key validated Python libraries & versions
 > Versions and dependencies are listed within the installation guide
 - [Tensorflow](https://github.com/tensorflow/tensorflow) `2.4.0`
 - [ImageAI](https://github.com/OlafenwaMoses/ImageAI) `2.1.6`
