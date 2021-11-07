@@ -49,6 +49,7 @@ With the use of open-source machine learning engines and technologies, we have b
   - [deepspeech-0.9.3-models.pbmm](https://github.com/mozilla/DeepSpeech/releases/tag/v0.9.3)
   - [deepspeech-0.9.3-models.scorer](https://github.com/mozilla/DeepSpeech/releases/tag/v0.9.3)
 
+# Installation Manual
 ## Prerequisites - Installing the support files
 Due to potential conflicts in dependency versions it is **highly** recommended that you install the following files in the provided sequence.
 
