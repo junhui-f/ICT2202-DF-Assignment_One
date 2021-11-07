@@ -110,7 +110,7 @@ Due to potential conflicts in dependency versions it is **highly** recommended t
     └── imageAI\            # Image Analyser plugin
     ```
 
-3. Ensure **DeepSpeech** Models have been downloaded as per [Prerequisites - 4. AudioToText](https://github.com/junhui-f/ICT2202-DF-Assignment_One#others)
+3. Ensure **DeepSpeech** Models have been downloaded as per **Prerequisites - 4. AudioToText**
 
 4. Launch Autopsy!
 
