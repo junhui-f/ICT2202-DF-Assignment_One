@@ -85,7 +85,7 @@ Due to potential conflicts in dependency versions it is **highly** recommended t
       pip install deepspeech pydub webrtcvad
       ```
     - Others
-      - [**FFMPEG**](https://www.ffmpeg.org/download.html) to support conversion between `.mp3` to `.wav` for processing
+      - [**FFMPEG**](https://www.ffmpeg.org/download.html) to support conversion from `.mp3` to `.wav` for processing
       - **DeepSpeech** Model to be downloaded and selected when prompted
         - [deepspeech-0.9.3-models.pbmm](https://github.com/mozilla/DeepSpeech/releases/tag/v0.9.3)
         - [deepspeech-0.9.3-models.scorer](https://github.com/mozilla/DeepSpeech/releases/tag/v0.9.3)
