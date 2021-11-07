@@ -21,7 +21,6 @@ With the use of open-source machine learning engines and technologies, we have b
 ```
 .
 ├── DeepSpeech/         # AudioToText plugin
-├── Java/               # Scrapped Java plugin
 ├── VideoAI/            # Video Analyser plugin
 │   └── models/         # imageAI pretrained model
 ├── imageAI/            # Image Analyser plugin
