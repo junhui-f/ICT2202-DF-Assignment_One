@@ -92,7 +92,7 @@ Due to potential conflicts in dependency versions it is **highly** recommended t
 
 ## Installation - Setting up the plugin on Autopsy
 1. Either download via
-    - The release bundle [INSERT LINK HERE](http://github.com)
+    - The release bundle [Latest Release](https://github.com/junhui-f/ICT2202-DF-Assignment_One/releases)
     - Or any other method e.g `git`
     
 2. Move the following folders into the **Autopsy Python plugin directory**
